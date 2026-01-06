@@ -1,0 +1,407 @@
+/* Unified responsive CSS with Bootstrap integration - removed separate mobile CSS */
+:root {
+  --primary-navy: #8b2c2c;
+  --primary-gold: #f0c34a;
+  --accent-coral: #f97316;
+  --neutral-white: #ffffff;
+  --neutral-gray-50: #f8f9fa;
+  --neutral-gray-100: #f3f4f6;
+  --neutral-gray-200: #e5e7eb;
+  --neutral-gray-300: #d1d5db;
+  --neutral-gray-600: #6c757d;
+  --neutral-gray-700: #495057;
+  --neutral-gray-800: #343a40;
+  --neutral-gray-900: #212529;
+  --success-green: #198754;
+  --error-red: #dc3545;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --border-radius: 0.5rem;
+}
+
+/* Bootstrap integration with custom styling */
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  color: var(--neutral-gray-800);
+  background: linear-gradient(135deg, var(--neutral-gray-50) 0%, var(--neutral-white) 100%);
+  min-height: 100vh;
+}
+
+/* Custom Bootstrap component overrides */
+.btn-primary {
+  background-color: var(--primary-navy);
+  border-color: var(--primary-navy);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #6f2323;
+  border-color: #6f2323;
+}
+
+.btn-outline-primary {
+  color: var(--primary-navy);
+  border-color: var(--primary-navy);
+  font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-navy);
+  border-color: var(--primary-navy);
+}
+
+.text-primary {
+  color: var(--primary-navy) !important;
+}
+
+.border-warning {
+  border-color: var(--primary-gold) !important;
+}
+
+.bg-primary {
+  background-color: var(--primary-navy) !important;
+}
+
+/* Form styling with Bootstrap integration */
+.form-control {
+  border: 2px solid var(--neutral-gray-300);
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-navy);
+  box-shadow: 0 0 0 0.2rem rgba(139, 44, 44, 0.15);
+  background-color: var(--neutral-white);
+}
+
+.form-control[readonly] {
+  background-color: var(--neutral-gray-50);
+  color: var(--neutral-gray-600);
+}
+
+.rounded-pill {
+  border-radius: 50rem !important;
+}
+
+/* Card styling with custom shadows and borders */
+.card {
+  border: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.card.shadow-lg {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 10px solid hwb(50deg 2.86% 0%) !important;
+
+}
+
+.rounded-4 {
+  border-radius: 1.25rem !important;
+}
+
+.rounded-top-4 {
+  border-top-left-radius: 1.25rem !important;
+  border-top-right-radius: 1.25rem !important;
+}
+
+.rounded-bottom-4 {
+  border-bottom-left-radius: 1.25rem !important;
+  border-bottom-right-radius: 1.25rem !important;
+}
+
+/* Image preview styling */
+#imagePreview {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--neutral-gray-50);
+  display: none;
+}
+
+#imagePreview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: var(--border-radius);
+  object-fit: contain;
+}
+
+/* Loading spinner styling */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Success message styling */
+.alert-success {
+  background-color: #fff8e1;
+  border-color: var(--primary-gold);
+  color: var(--primary-navy);
+  border-width: 2px;
+}
+
+/* Popup message styling for notifications */
+.popup-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  max-width: 400px;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.popup-message.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.popup-message.success {
+  background: var(--success-green);
+  color: var(--neutral-white);
+  border-left: 4px solid #146c43;
+}
+
+.popup-message.error {
+  background: var(--error-red);
+  color: var(--neutral-white);
+  border-left: 4px solid #b02a37;
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.popup-icon {
+  font-size: 1.25rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.popup-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Gold formula section styling */
+#goldFormulaSection .card {
+  border: 1px solid var(--neutral-gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+#goldFormulaSection .card-body {
+  padding: 1rem;
+}
+
+#goldFormulaSection .card-title {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+#goldFormulaSection h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1.5rem !important;
+  }
+
+  .row.g-3 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+  }
+
+  .col-md-4,
+  .col-md-6,
+  .col-md-8,
+  .col-md-12 {
+    margin-bottom: 1rem;
+  }
+
+  /* Stack form elements vertically on mobile */
+  .col-md-8,
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Adjust gold formula cards for mobile */
+  #goldFormulaSection .col-md-4 {
+    margin-bottom: 0.75rem;
+  }
+
+  /* History iframe height adjustment for mobile */
+  #historyFrame {
+    height: 50vh !important;
+    min-height: 600px !important;
+  }
+
+  /* Popup messages for mobile */
+  .popup-message {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    transform: translateY(-100%);
+  }
+
+  .popup-message.show {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding: 0.5rem;
+  }
+
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Stack all columns on small mobile */
+  .col-md-3,
+  .col-md-4,
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Adjust form labels and inputs for small screens */
+  .form-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* History frame for very small screens */
+  #historyFrame {
+    height: 40vh !important;
+    min-height: 600px !important;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* .card-body {
+    padding: 2rem !important;
+  } */
+
+  #historyFrame {
+    height: calc(100vh - 150px) !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .popup-message,
+  .btn,
+  #historyFrame,
+  .card:last-child {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+
+  body {
+    background: white !important;
+  }
+}
+
+/* Focus and accessibility improvements */
+.form-control:focus,
+.btn:focus {
+  outline: 2px solid var(--primary-navy);
+  outline-offset: 2px;
+}
+
+.btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Animation for smooth transitions */
+.card,
+.form-control,
+.btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Custom scrollbar for iframe */
+#historyFrame::-webkit-scrollbar {
+  width: 6px;
+}
+
+#historyFrame::-webkit-scrollbar-track {
+  background: var(--neutral-gray-100);
+}
+
+#historyFrame::-webkit-scrollbar-thumb {
+  background: var(--neutral-gray-300);
+  border-radius: 3px;
+}
+
+#historyFrame::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-gray-600);
+}

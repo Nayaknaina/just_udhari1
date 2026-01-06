@@ -1,0 +1,207 @@
+.menu-categories{
+    /*margin-top:70px;*/
+    list-style: none;
+}
+/*.menu-logo{
+    display: block;
+    position: fixed;
+    top: 0;
+    width: inherit;
+    border-bottom: 1px dashed gray;
+}*/
+
+.menu-logo > a > img{
+    height:40px;
+    width:auto;
+}
+.menu-logo > a {
+    width: 100%;
+    display: block;
+    color:#f95600;
+    font-weight:bold;
+}
+li.main-menu{
+    padding:5px;
+    /*font-size:90%;*/
+	font-size: 110%;
+    position: relative;
+}
+ul.sub-menu >li{
+	padding:2px;
+	font-size: 95%;
+	position: relative;
+}
+li.main-menu > a,ul.sub-menu>li>a{
+    display: block;
+    width:100%;
+    position: relative;
+    text-wrap:wrap;
+}
+li.main-menu > a{
+    padding:5px 20px 5px 10px;
+}
+ul.sub-menu>li>a{
+    padding:5px 5px 5px 15px;
+}
+li.main-menu ul{
+    list-style:none;
+    padding:0 0 0 15px;
+}
+ul.sub-menu{
+    transition: max-height 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
+}
+ul.sub-menu > li:before{
+    content:"";
+    border-left:1px solid #909090;
+    position: absolute;
+    left: 0; 
+    height:100%;
+    top:0;
+}
+ul.sub-menu > li:last-child:before{
+    height: 50%;
+}
+ul.sub-menu > li:after{
+    content:"";
+    border-bottom:1px solid #909090;
+    position: absolute;
+    left: 0; /* This aligns with ul padding */
+    /* top: 0.1em; */
+    /* color: #333; */
+    width:10px;
+    top:50%;
+}
+
+li.main-menu.has-sub > a:after{
+    /*content:"\00BB";*/
+    content:"\203A";
+    position: absolute;
+    transform:rotate(90deg); 
+    right:0px;
+    top:0;
+    bottom:0;   
+    display: inline-block;
+    transition: transform 0.3s ease;
+    height: 100%;
+    align-content: flex-end;
+	color: #505d70;
+}
+li.main-menu ul.sub-menu{
+    display: none;
+}
+.main-menu.has-sub.show > .sub-menu{
+   display: block;
+}
+/*li.main-menu ul.sub-menu{
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
+}
+.main-menu.has-sub.show > .sub-menu{
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
+}*/
+.main-menu.has-sub.show > a:after {
+    /*content:"\00AB";*/
+    content:"\2039";
+    transform: rotate(90deg); 
+}
+/*.main-menu{
+	background:#f0f0f0;
+}*/
+.main-menu:hover{
+	background:#f8f8f8;
+}
+.main-menu li a:hover,
+.main-menu a:hover,
+.main-menu.has-sub.show > a,
+.sub-menu > li.active >a{
+    color:#f95600;
+}
+
+
+.main-menu.show{
+    background: #f6f6f6;
+    /*border-bottom:1px dashed gray;*/
+    box-shadow: 1px 2px 3px lightgray;
+}
+.main-menu.show > a{
+    background:#e6e6e6;
+    border: 1px solid #c7c7c7;
+    box-shadow: 1px -2px 3px lightgray;
+}
+/*----Hover Effect----*/
+
+/* Sidebar Icon Animation */
+.nav-icon svg {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Hover par thoda move + color change */
+.main-menu:hover .nav-icon svg{
+  transform: translateX(4px) scale(1.1);
+  color: #ff6600;
+  /* primary accent */
+}
+.new-menu.min .main-menu.active:hover .nav-icon svg{
+	color:white!important;
+}
+
+.new-menu.min > ul > li > a:after{
+	content:"";
+}
+
+li.active:not('.sub-menu') > a{
+	color:white!important;
+}
+
+.main-menu.active .nav-icon svg{
+	transform: translateX(4px) scale(1.1);
+}
+.new-menu.min > ul > li.main-menu.active a{
+	background: linear-gradient(135deg,#ff7b00,#ff4d00);
+	color: white;
+	border-radius:8px;
+	box-shadow:0 6px 16px rgba(255,123,0,0.4);
+}
+li.main-menu.active:not(.show) a{
+	background:#eaeaea;
+	border:1px solid orange;
+	color:#ef6c00;
+}
+/*.new-menu.min > ul > li.main-menu.active::after{
+	content:"";
+	position:absolute;
+	top:0;
+	left:-50%;
+	width:200%;
+	height:100%;
+	background:linear-gradient(120deg, transparent,rgba(255,255,255,0.4),transparent);
+	transform:skewx(-20deg);
+	animation:shine 2s infinite; 
+}*/
+/*.main-menu.active .nav-icon svg{
+	background:gray;
+	color:orange;
+}*/
+
+.tooltip .tooltip-inner {
+  /*background-color: #0d6efd!important;*/   /* Bootstrap primary blue */
+  background-color: white;
+  /*color: #fff;  */               /* White text */
+  color:#f95600;
+  font-weight:bold;
+  font-size: 13px;             /* Smaller text */
+  padding: 6px 10px;           /* Space inside */
+  border-radius: 6px;          /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* subtle shadow */
+  border:1px solid #f95600;
+}
+
+/* Tooltip arrow */
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  /*border-bottom-color: #0d6efd;*/  /* Match tooltip background */
+}

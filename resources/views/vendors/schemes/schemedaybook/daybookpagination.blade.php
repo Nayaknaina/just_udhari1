@@ -1,0 +1,1 @@
+@include('layouts.theme.datatable.pagination', ['paginator' => $transactions,'type'=>1])

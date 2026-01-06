@@ -1,0 +1,1 @@
+@include('layouts.theme.datatable.pagination', ['paginator' => $enquiries,'type'=>1])

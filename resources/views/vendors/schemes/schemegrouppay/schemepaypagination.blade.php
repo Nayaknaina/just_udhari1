@@ -1,0 +1,1 @@
+@include('layouts.theme.datatable.pagination', ['paginator' => $group_txns,'type'=>1])

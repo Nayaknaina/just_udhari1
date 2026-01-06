@@ -1,0 +1,107 @@
+.dataTables_scrollBody>table#CsTable.table_theme > thead > tr >th{
+    padding-top:0!important;
+    padding-bottom:0!important;
+}
+.dataTables_scrollBody>table#CsTable.table_theme > tfoot > tr >td,
+.dataTables_scrollBody>table#CsTable.table_theme > tfoot > tr >th{
+	padding-top:0!important;
+    padding-bottom:0!important;
+	background:unset!important;
+}
+.table.table_theme {
+    border-spacing:.1rem!important; /* horizontal and vertical spacing */
+    width:100%!important;
+}
+.table.table_theme>thead>tr>th{ 
+	padding:.40rem!important;
+	align-content:center;
+}
+
+.table.table_theme>thead>tr>th,
+.table.table_theme>tbody>tr>td,
+.table.table_theme>tbody>tr>th,
+.table.table_theme>tfoot>tr>td,
+.table.table_theme>tfoot>tr>th{
+    border-radius:10px!important;
+}
+.table.table_theme>thead>tr>th,
+.table.table_theme>tfoot>tr>td,
+.table.table_theme>tfoot>tr>th{
+    background:#f5e5dc !important;
+    color: black;
+    border-top:1px solid rgb(255, 202, 164);
+    border-left:1px solid rgb(255, 202, 164)!important;
+    border-right:1px solid rgb(255, 202, 164);
+    border-bottom:1px solid rgb(255, 202, 164);
+} 
+.table.table_theme >tbody>tr:nth-child(2n+1):hover,
+.table.table_theme >tbody>tr:hover{
+    background-color: unset!important;
+}
+.table.table_theme>tbody>tr>td,
+.table.table_theme>tbody>tr>th,
+.table.table_theme>tfoot>tr>td,
+.table.table_theme>tfoot>tr>th{
+    padding:.10rem!important;
+    border-left:1px solid rgba(211, 211, 211, 0.336)!important;
+	line-height:initial;
+}
+.table.table_theme>tbody>tr:last-child>td,.table.table_theme>tbody>tr:last-child>th{
+    border-bottom-width:inherit;
+    border-bottom:1px solid lightgray!important;
+}
+
+.table.table_theme >tbody >tr:nth-child(odd)>td,.table.table_theme >tbody >tr:nth-child(odd)>th {
+    background-color: white!important;
+  }
+  
+.table.table_theme >tbody >tr:nth-child(even)>td,.table.table_theme >tbody >tr:nth-child(even)>th {
+    background-color: #86868612!important;
+}
+.table.table_theme >tbody >tr:hover>td,
+.table.table_theme >tbody >tr:hover>th{
+    /* background-color: #86868621 !important; */
+    box-shadow:1px 2px 3px lightgray;
+    border-top:1px solid orange;
+    border-bottom:1px solid orange!important;
+}
+/*.table.table_theme >tbody >tr[class*="table-"] >td{
+	background-color:inherit!important;
+}
+.table.table_theme >thead,.table.table_theme >thead >tr,.table.table_theme >tbody >tr{
+    background-color:unset!important;
+}*/
+
+.table.custom_scroll>thead th {
+background: #f2f2f2;
+position: sticky;
+top: 0;
+z-index: 2;
+}
+
+.table.custom_scroll>tbody {
+display: block;
+/*max-height: 100px; /* Adjust as needed */
+max-height:50vh;
+overflow-y: auto;
+}
+
+.table.custom_scroll>thead, .table.custom_scroll>tbody tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+.table.table_theme >tbody >tr.table-danger>td,
+.table.table_theme >tbody >tr.bg-danger>td
+{
+    background:#fdeaee !important;
+}
+.table.table_theme >tbody >tr.table-info>td,
+.table.table_theme >tbody >tr.bg-info>td
+{
+    background: #ececff !important;
+}
+table.table_theme>tbody>tr.winner> td{
+	//box-shadow:1px 2px 3px 4px totato!important;
+	background: linear-gradient(to bottom,#f9560070,white,white,white,white,white,white,white,#f9560070)!important;
+}

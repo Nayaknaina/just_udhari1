@@ -1,0 +1,36 @@
+.editor_container{
+	width:auto;
+}
+.rich-editor {
+  width: 100%;
+  min-width: 600px;
+  min-height:30%;
+  border:1px solid lightgray;
+  word-wrap:break-word;
+}
+
+.toolbar {
+  display: flex;
+  border: 1px solid lightgray;
+  background: #ececec;
+  width:auto;
+}
+
+.toolbar-btn {
+  margin-right: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+select {
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.editable {
+  font-family: Arial;
+  font-size: 14px;
+  min-height: 150px;
+  padding: 10px;
+}
+

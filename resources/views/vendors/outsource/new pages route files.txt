@@ -1,0 +1,76 @@
+
+    Route::get('vendor/girvi', function () {
+        return view('vendors.girvi.index');
+    })->name('vendor.girvi.index');
+
+    Route::get('vendor/girvi/detail', function () {
+        return view('vendors.girvi.viewdetail');
+    })->name('vendor.girvi.viewdetail');
+
+    Route::get('vendor/girvi/repair', function () {
+        return view('vendors.girvi.repair');
+    })->name('vendor.girvi.repair');
+
+    Route::get('vendor/girvi/first', function () {
+        return view('vendors.girvi.first');
+    })->name('vendor.girvi.first');
+
+    Route::get('vendor/girvi/ledger', function () {
+        return view('vendors.girvi.ledgerbook');
+    })->name('vendor.girvi.ledger');
+
+    Route::get('vendor/girvi/list', function () {
+        return view('vendors.girvi.list');
+    })->name('vendor.girvi.list');
+
+    Route::get('vendor/rfid', function () {
+        return view('vendors.rfid.index');
+    })->name('vendor.rfid.index');
+
+    Route::get('vendor/income', function () {
+        return view('vendors.rfid.income-expense');
+    })->name('vendor.rfid.income');
+    Route::get('vendor/list', function () {
+        return view('vendors.rfid.list');
+    })->name('vendor.rfid.list');
+    Route::get('vendor/index', function () {
+        return view('vendors.hrm.index');
+    })->name('vendor.hrm.index');
+
+    Route::get('vendor/view', function () {
+        return view('vendors.hrm.view_profile');
+    })->name('vendor.hrm.view');
+
+    Route::get('vendor/add', function () {
+        return view('vendors.hrm.add_employee');
+    })->name('vendor.hrm.add');
+
+    Route::get('vendor/attendance', function () {
+        return view('vendors.hrm.attendance');
+    })->name('vendor.hrm.attendance');
+
+
+    Route::get('vendor/exchange', function () {
+        return view('vendors.exchange.index');
+    })->name('vendor.exchange.index');
+
+    Route::get('vendor/exchange-list', function () {
+        return view('vendors.exchange.list');
+    })->name('vendor.exchange.list');
+
+    Route::get('vendor/sample-reciept', function () {
+        return view('vendors.exchange.reciept');
+    })->name('vendor.exchange.reciept');
+
+    // --------buy selll-----------
+    Route::get('vendor/buy-sell', function () {
+        return view('vendors.buy-sell.index');
+    })->name('vendor.buy-sell.index');
+
+    Route::get('vendor/buy-sell-list', function () {
+        return view('vendors.buy-sell.list');
+    })->name('vendor.buy-sell.list');
+
+    Route::get('vendor/buy-sell-reciept', function () {
+        return view('vendors.buy-sell.reciept');
+    })->name('vendor.buy-sell.reciept');

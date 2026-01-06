@@ -1,0 +1,42 @@
+.select2-selection{
+    border-radius: 15px 15px!important; 
+}
+select.form-control,
+input[type="text"].form-control,
+input[type="password"].form-control,
+input[type="number"].form-control,
+input[type="date"].form-control,
+input[type="file"].form-control,
+input[type="email"].form-control,
+input[type="url"].form-control,
+[type="submit"],
+[type="button"],
+a.btn,
+form .card,
+textarea.form-control{
+	border-radius: 15px 15px
+}
+a.ico_btn,button.ico_btn{
+    border-radius:50%;
+    padding:0 5px;
+}
+#cke_description,div.editor_container,.input-group > button#daterange-btn{
+    border-radius: 15px 15px!important;
+	overflow:hidden;
+}
+div.editor_container{
+    border:1px solid lightgray;
+}
+.input-group + input[type="text"].form-control,.input-group >.input-group-prepend>.input-group-text{
+    border-radius: 15px 0 0 15px;
+}
+.input-group > .select2-container > .selection > .select2-selection{
+    border-radius: 15px 0 0 15px!important;
+} 
+.input-group > .input-group-append button,.input-group > .input-group-append select,.input-group > .input-group-append >.input-group-text,.input-group > .input-group-text{
+    border-radius: 0 15px 15px 0;
+    overflow:hidden
+}
+.input-group ~ .input.form-control{
+	border-radius: 0 15px 15px 0;
+}

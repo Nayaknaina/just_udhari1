@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mailpit
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:base64:CM37RIr65jHdPiI3teaEXXnl3xLVAF1PSVmbF2ruCKk=
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=just_udhari
+      - DB_USERNAME=root
+      - DB_PASSWORD=
+      - MAIL_MAILER=smtp
+      - MAIL_HOST=smtp
+      - MAIL_PORT=465
+      - MAIL_USERNAME=worksuite@lifesavingorganization.com
+      - MAIL_PASSWORD=Prashant!@#123
+      - MAIL_ENCRYPTION=null
+      - MAIL_FROM_ADDRESS=worksuite@lifesavingorganization.com
+      - MAIL_FROM_NAME="${APP_NAME}"
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_root_password
+      - MYSQL_DATABASE=your_database
+      - MYSQL_USER=your_username
+      - MYSQL_PASSWORD=your_password
+
+volumes:
+  db_data:
