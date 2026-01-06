@@ -114,7 +114,7 @@
 			}
 		}
     </style>
-    <nav id = "compactSidebar" class="new-menu max">        
+    <nav id = "compactSidebar" class="new-menu min">        
         {{--<div class="theme-logo">
             <a href="{{ url('vendors/') }}">
                 <img src = "{{ asset('assets/images/favicon.png') }}" class="navbar-logo" alt="logo">

@@ -68,7 +68,10 @@
     .imp_link_li:hover .submenu{
         display:block;
     }
-    @media (max-width: 768px) {
+    @media  (max-width: 1024px) {
+            .navbar .navbar-item.search-ul {
+        margin: 0 0 auto;
+            }
         #imp_short_cut{
             display:block;
             cursor:pointer;
@@ -78,7 +81,7 @@
             position:absolute;
             top:100%;
             display:none;
-            right:0;
+            right:18%;
             box-shadow:unset;
             padding:0;
             background:unset;

@@ -219,7 +219,7 @@ code { color: #e7515a; }
     background: #FFF;
     -ms-flex-flow: row nowrap;
     flex-flow: row nowrap;
-    max-height: 40px;
+    max-height: 46px;
     -webkit-transition: .3s ease all;
     transition: .3s ease all;
 }
@@ -631,6 +631,13 @@ code { color: #e7515a; }
     /*width: 100%;*/
     width: 255px!important;
     height: 30px;
+}
+@media (max-width: 576px) {
+
+    .navbar .navbar-item .nav-item .form-inline.search .search-form-control {
+        width: 100% !important;  
+        height: 32px;            
+    }
 }
 .navbar .navbar-item .nav-item form.form-inline input.search-form-control::-webkit-input-placeholder {
     color: #bfc9d4;

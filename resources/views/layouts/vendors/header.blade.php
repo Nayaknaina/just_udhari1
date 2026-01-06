@@ -374,13 +374,13 @@ header.header {
     }
 
     /* All links + icons white */
-    header.header a,
-    header.header span,
+
+  
     header.header svg,
     header.header i {
         color: #fff !important;
         fill: #fff !important;
-    }
+    } 
 
     /* Search bar */
     .navbar .search-ul {
@@ -614,13 +614,13 @@ header.header {
     }
 
     /* All links + icons white */
-    header.header a,
+    /* header.header a,
     header.header span,
     header.header svg,
     header.header i {
         color: #fff !important;
         fill: #fff !important;
-    }
+    } */
 
     /* Search bar */
     .navbar .search-ul {
