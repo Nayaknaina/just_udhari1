@@ -1450,7 +1450,7 @@ code { color: #e7515a; }
         width: 38px;
         height: 38px;
     }
-    .main-container.sidebar-closed #content { margin-left: 0; }
+    /* .main-container.sidebar-closed #content { margin-left: 0; } */
     .navbar .language-dropdown .custom-dropdown-icon { margin-right: 0; }
     .navbar .language-dropdown .custom-dropdown-icon a.dropdown-toggle svg { display: none; }
     .navbar .language-dropdown .custom-dropdown-icon a.dropdown-toggle img { margin-right: 0; }
@@ -1575,7 +1575,7 @@ code { color: #e7515a; }
             Sidebar
         =============
     */
-    #content { margin-left: 0; }
+    /* #content { margin-left: 0; } */
     html.sidebar-noneoverflow .main-container:not(.sidebar-closed) .sidebar-wrapper #compactSidebar,
     .main-container.sbar-open .sidebar-wrapper #compactSidebar { left: 0; }
     .sidebar-wrapper #compact_submenuSidebar.show { left: 80px; }
