@@ -32,13 +32,13 @@
     <div class="contact-info mr-20">
     <span>Contact Info</span>
     <h2>Let's Connect With Us</h2>
-    <p>For your total peace of mind, it is outfitted with unique security tools that were created especially for jewelry businesses</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam imperdiet varius mi, ut hendrerit magna mollis ac. </p>
     <ul>
     <li>
     <div class="content">
     <i class="bx bx-phone-call"></i>
     <h3>Phone Number</h3>
-    <a href="tel:12122555511">+91-7879404501</a>
+    <a href="tel:7879404501">+91-7879404501</a>
     </div>
     </li>
     <li>
@@ -53,7 +53,7 @@
     <div class="content">
     <i class="bx bx-message"></i>
     <h3>Contact Info</h3>
-    <a href="#"><span class="__cf_email__" data-cfemail="5a323f3636351a2e3f39323f2274393537"> hambiresolution@gmail.com</span></a>
+    <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#6a020f0606052a1e0f09020f1244090507"><span class="__cf_email__" data-cfemail="5a323f3636351a2e3f39323f2274393537">hambiresolution@gmail.com</span></a>
     </div>
     </li>
     </ul>
@@ -61,7 +61,8 @@
     </div>
     <div class="col-lg-8">
     <div class="contact-form">
-    <form id="contactForm" novalidate="true">
+    <form  id="contactForm" action="{{ route('contact.store') }}" method="POST" >
+      @csrf
     <div class="row">
     <div class="col-lg-6">
     <div class="form-group has-error has-danger">
@@ -95,14 +96,22 @@
     </div>
     <div class="col-lg-12 col-md-12">
     <div class="agree-label">
-    <input type="checkbox" id="chb1">
-    <label for="chb1">
-    Accept <a href="terms-condition.html">Terms &amp; Conditions</a> And <a href="privacy-policy.html">Privacy Policy.</a>
+      <label for="chb1">
+    Accept  <a href="{{ route('policy','term') }}" class="px-1"><u>Term & Conditions</u></a> And <a href="{{ route('policy','privacy') }}" class="px-1"><u>Privacy Policy</u></a>
     </label>
+    <input type="checkbox" id="chb1" name="agree" value="yes">
+    
     </div>
     </div>
     <div class="col-lg-12 col-md-12 text-center">
-    <button type="submit" class="default-btn btn-bg-two border-radius-50 disabled">
+      <div id="formLoader" class="text-center d-none mt-3">
+    <img src="https://i.gifer.com/YCZH.gif" width="50">
+    <p class="text-secondary mt-2">Sending your message...</p>
+    </div>
+
+    <div id="formSuccess" class="alert alert-success d-none mt-3"></div>
+
+    <button type="submit" class="default-btn btn-bg-two border-radius-50 ">
     Send Message <i class="bx bx-chevron-right"></i>
     </button>
     <div id="msgSubmit" class="h3 text-center hidden"></div>
@@ -129,3 +138,4 @@
   </script>
 
 @endsection
+

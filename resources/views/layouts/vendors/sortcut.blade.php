@@ -71,17 +71,23 @@
     @media  (max-width: 1024px) {
             .navbar .navbar-item.search-ul {
         margin: 0 0 auto;
+
+               
+        display: flex;
+        align-items: center;
+        gap: 30px;
             }
         #imp_short_cut{
             display:block;
             cursor:pointer;
-            margin-left:auto;
+            margin: auto;
+            /* margin-left:auto; */
         }
         #imp_links_ul{
             position:absolute;
             top:100%;
             display:none;
-            right:18%;
+            right:20%;
             box-shadow:unset;
             padding:0;
             background:unset;

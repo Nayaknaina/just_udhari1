@@ -36,8 +36,11 @@ use Illuminate\Support\Facades\Route;
     Route::get('/get-districts', 'LocationController@get_districts');
 	Route::get('/policy/{param?}','HomeController@information')->name('policy');
 	Route::get('/request/delete/account','HomeController@accountdeleterequest')->name('accountdeleterequest');
-    // Admin Login
 
+    Route::post('/contact/store',  'ContactController@store')->name('contact.store');
+
+   
+    // Admin Login
     Route::get('/super_login', 'Auth\AdminLoginController@index')->name('super_login') ;
     Route::post('/super_login', 'Auth\AdminLoginController@login')->name('super_login') ;
 

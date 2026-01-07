@@ -107,7 +107,9 @@
                     return;  // Do nothing if the query is empty
                 }
 
-                const menuItems = document.querySelectorAll('#compact_submenuSidebar .submenu-list li a');
+                // const menuItems = document.querySelectorAll('#compact_submenuSidebar .submenu-list li a');
+                const menuItems = document.querySelectorAll('#compactSidebar li a[href]:not([href="javascript:void(null);"]):not([href="#"])');
+
                 const results = [] ;
 
                 menuItems.forEach(function (item) {

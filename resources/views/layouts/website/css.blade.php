@@ -35,12 +35,12 @@
 
         }
 
-        .default-btn {
+        /* .default-btn {
 
             padding: 8px 8px;
             font-size: 8px;
 
-        }
+        } */
 
         .growth-area {
             padding: 50px 0;
@@ -219,7 +219,7 @@
 
     }
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 1024px) {
 
         .mob-login .default-btn {
                     display: inline-block;

@@ -22,31 +22,28 @@
                         <a class="navbar-brand" href="{{ url('/') }}">
                         <img src = "{{ asset('assets/images/logo/logo.png') }}" class="logo-one" alt="Logo">
                         </a>
-                        <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                         <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
                             <ul class="navbar-nav m-auto">
                                 <li class="nav-item">
-                                    <a href="{{ url('/') }}" class="nav-link active"> Home  </a>
+                                    <a href="{{ url('/') }}" class="nav-link {{ isActive('/')  }}"> Home  </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('products/jwellery-software') }}" class="nav-link"> Jwellery Software  </a>
+                                    <a href="{{ url('products/jwellery-software') }}" class="nav-link {{ isActive('products/jwellery-software')  }}"> Jwellery Software  </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('products/money-leading-software') }}" class="nav-link"> Money Leading Software  </a>
+                                    <a href="{{ url('products/money-leading-software') }}"  class="nav-link {{ isActive('products/money-leading-software')  }}"> Money Leading Software  </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('software-tutorial') }}" class="nav-link"> Software Tutorial  </a>
+                                    <a href="{{ url('software-tutorial') }}" class="nav-link {{ isActive('software-tutorial')  }}"> Software Tutorial  </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{url('whats-new')}}" class="nav-link"> What`s New  </a>
+                                    <a href="{{url('whats-new')}}" class="nav-link {{ isActive('whats-new') }}"> What`s New  </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('/faq') }}" class="nav-link"> Faq </a>
+                                    <a href="{{ url('faq') }}" class="nav-link {{ isActive('faq') }}"> Faq </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('/contact') }}" class="nav-link"> Contact  </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('/login') }}" class="nav-link"> Login  </a>
+                                    <a href="{{ url('contact') }}" class="nav-link {{ isActive('contact') }}"> Contact  </a>
                                 </li>
                             </ul>
 
@@ -54,7 +51,7 @@
                                 <div class="nav-side-item">
                                     <div class="get-btn">
                                         <a href="{{ url('/login') }}" class="default-btn btn-bg-two border-radius-50"> Login <i class="bx bx-chevron-right"></i></a>
-                                        <a href="{{ url('/') }}" class="default-btn btn-bg-three border-radius-50">Get Free Demo <i class="bx bx-chevron-right"></i></a>
+                                        <a href="#free-demo" class="default-btn btn-bg-three border-radius-50">Get Free Demo <i class="bx bx-chevron-right"></i></a>
                                     </div>
                                 </div>
                             </div>

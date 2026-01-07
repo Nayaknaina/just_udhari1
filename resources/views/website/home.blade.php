@@ -103,7 +103,7 @@
     </div>
 </div>
 
-<section class = "demo-section" >
+<section class = "demo-section" id="free-demo">
 
     <div class="container">
         <div class="row">
