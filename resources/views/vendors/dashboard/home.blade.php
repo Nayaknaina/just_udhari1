@@ -474,9 +474,67 @@
 .stock_block:hover .card {
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+/* =====================================
+   INVENTORY STOCK – STABLE RESPONSIVE GRID
+   ===================================== */
+
+/* Desktop (≥ 992px) → Bootstrap auto */
+.inventory-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Tablet (577px – 991px) → 3 per row */
+@media (min-width: 820px) and (max-width: 1180px) {
+  .inventory-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+ .inventory-grid > .col-md-2 {
+  flex: 1 1 auto !important;
+  max-width: 100% !important;
+}
+.inventory-grid > .col-md-4 {
+  flex: 1 1 auto !important;
+  max-width: 100% !important;
+}
+.inventory-grid > .col-md-3 {
+  flex: 1 1 auto !important;
+  max-width: 100% !important;
+}
+}
+
+/* Phone (≤ 576px) → 2 per row */
+@media (max-width: 576px) {
+  .inventory-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .inventory-grid .stock_block {
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .inventory-grid .card {
+    padding: 12px 10px;
+    border-radius: 14px;
+  }
+
+  .inventory-grid .card-title {
+    font-size: 0.8rem;
+  }
+
+  .inventory-grid .card-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+}
 
 
-    
   </style>
 
 
@@ -693,7 +751,8 @@
           </div>
         </div>
 
-        <div class="row gy-3">
+       <div class="row gy-3 inventory-grid">
+
           <div class="col-md-2 m-auto stock_block">
               <a href="{{ route('stock.new.dashboard',['gold']) }}" class="text-decoration-none">
                   <x-card-stock-item 
@@ -795,7 +854,7 @@
           <a class="btn btn-sm btn-outline-danger" href="{{ route('billing','sale') }}">Create Bill</a>
         </div>
 
-        <div class="row gy-3">
+         <div class="row gy-3 inventory-grid">
           <div class="col-md-4">
             <x-card-billing-item title="Total Sell (Today)" icon="fa-bag-shopping" iconColor="#28c76f"
               value="₹{{ number_format($totalSellToday) }}" sub="{{ $transactionCountToday }} transaction" />
@@ -836,7 +895,7 @@
            <a class="btn btn-sm btn-success" href="{{ route('udhar.create') }}">New Txn</a>
         </div>
 
-        <div class="row gy-3">
+       <div class="row gy-3 inventory-grid">
           <!-- <div class="col-md-3">
             <x-card-udhari-item label="Total Udhari" icon="fa-solid fa-wallet" value="₹{{ number_format($totalUdhari) }}"
               sub="{{-- @Bill::where('shop_id', 31)->where('branch_id', 33)->where('balance', '>', 0)->count() --}} customers" />
@@ -875,7 +934,7 @@
          
         </div>
 
-        <div class="row gy-3">
+       <div class="row gy-3 inventory-grid">
           <div class="col-md-3">
             <x-card-scheme-stat title="Active Schemes" value="{{ number_format($activeSchemes) }}" icon="fa-award"
               iconColor="#28c76f" />
