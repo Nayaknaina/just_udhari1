@@ -398,6 +398,7 @@
     pointer-events: none;
 }
 
+
 .btn-roundhalf {
     border-radius: 10px !important;
 }
@@ -441,10 +442,10 @@
     display: inline-block;
     transform: translateY(0);
 }
-.layout-px-spacing {
+/* .layout-px-spacing {
     box-shadow: 1px 2px 4px gray inset;
     border-top: 1px solid #f85600;
-}
+} */
 
 .btn-outline-default:hover,
 .btn-outline-default.active {

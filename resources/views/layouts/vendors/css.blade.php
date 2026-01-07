@@ -187,6 +187,16 @@
 	nav#compactSidebar{
 		box-shadow: 1px -2px 3px gray!important;
 	}*/
+
+      #CsTable {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #option_drop_down {
+            position: fixed;
+            z-index: 9999;
+        }
 </style>
 
 @yield('css')

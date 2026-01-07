@@ -66,6 +66,17 @@
             top:0;
             bottom:0;
         }
+
+        #CsTable {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #option_drop_down {
+            position: fixed;
+            z-index: 9999;
+        }
+
     </style>
 
     <section class = "content">
