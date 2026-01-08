@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Route;
         Route::get('/', 'HomeController@index') ;
         Route::get('/dashboard', 'HomeController@index')->name('dashboard')  ;
 
+        //Contact Enquiries
+         Route::get('/contact', 'HomeController@contactindex')->name('contact.index')  ;
+        Route::get('/contact/data', 'HomeController@contactData')->name('contact.data');
+        Route::delete('/contact/{id}', 'HomeController@contactDestroy')->name('contact.destroy');
+        Route::post('/contact/{id}/read',  'HomeController@markAsRead')->name('contact.read');
+
         //////////////////////////////////////////////////////////////////////////////
 
         Route::resource('/softwareproducts', 'SoftwareProductController') ;

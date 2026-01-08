@@ -422,9 +422,9 @@ Route::match(['get','post'],'stock/new/delete','StockController@deletestock')->n
 	
     //---------------GIRVI Route--------------------------------------//
 	
-	Route::match(['get','post'],'/girvi/{section?}/{page?}/{id?}',function(){
-        return view('vendors.comingsoon');
-    });
+	// Route::match(['get','post'],'/girvi/{section?}/{page?}/{id?}',function(){
+    //     return view('vendors.comingsoon');
+    // });
 	
 	Route::get('/girvi/transactions/{girvicustomer}','GirviController@custotransactions')->name('girvi.custotxns');
 
