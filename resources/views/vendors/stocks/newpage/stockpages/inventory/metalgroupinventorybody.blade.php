@@ -172,28 +172,28 @@
     </tbody>
     <tfoot class="text-center data_area">
         <tr>
-            <td colspan="2"><label class="form-control m-0">{{ @$count }} Items</label></td>
+            <td colspan="2"><label class="text-dark m-auto">{{ @$count }} Items</label></td>
             <td ></td>
             <td>
                 <div class="">
-                    <label class="form-control m-0">{{ @$total_items }}</label>
+                    <label class="text-dark m-auto">{{ @$total_items }}</label>
                 </div>
             </td>
             <td>
                 <div class="over-text-container">
-                    <label class="form-control m-0">{{ @number_format($total_gross,3) }}</label>
+                    <label class="text-dark m-auto">{{ @number_format($total_gross,3) }}</label>
                     <span class="over-text">Gm</span>
                 </div>
             </td>
             <td>
                 <div class="over-text-container">
-                    <label class="form-control m-0">{{ @number_format($total_net,3) }}</label>
+                    <label class="text-dark m-auto">{{ @number_format($total_net,3) }}</label>
                     <span class="over-text">Gm</span>
                 </div>
             </td>
             <td>
                 <div class="over-text-container">
-                    <label class="form-control m-0">{{ @number_format($total_fine,3) }}</label>
+                    <label class="text-dark m-auto">{{ @number_format($total_fine,3) }}</label>
                     <span class="over-text">Gm</span>
                 </div>
             </td>
@@ -205,7 +205,7 @@
 			</td>--}}
 			<td >
 				<div class="over-text-container text-center">
-                    <label class="form-control m-0">{{ @$total }}</label>
+                    <label class="text-dark m-auto">{{ @$total }}</label>
                     <span class="over-text">Rs</span>
                 </div>
 			</td>

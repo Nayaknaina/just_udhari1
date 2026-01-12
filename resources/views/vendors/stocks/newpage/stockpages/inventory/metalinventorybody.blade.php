@@ -264,23 +264,23 @@
     </tbody>
     <tfoot class="text-center data_area">
         <tr class="text-center">
-             <td colspan="2"><label class="form-control m-0">{{ @$count }} Items</label></td>
+             <td colspan="2"><label class="text-dark m-auto">{{ @$count }} Items</label></td>
             <td colspan="2"></td>
             <td>
-                <label class="form-control m-0">{{ $num??'-' }}</label>
+                <label class="text-dark m-auto">{{ $num??'-' }}</label>
                 
             </td>
             <td></td>
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ @number_format($gross,3) }}</label>
+                    <label class="text-dark m-auto">{{ @number_format($gross,3) }}</label>
                     <span class="over-text">Gm</span>
                 </div>
 			</td>
             <td></td>
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ @number_format($net,3) }}</label>
+                    <label class="text-dark m-auto">{{ @number_format($net,3) }}</label>
                     <span class="over-text">Gm</span>
                 </div>
 			</td>
@@ -288,33 +288,33 @@
             <td></td>
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ @number_format($fine,3) }}</label>
+                    <label class="text-dark m-auto">{{ @number_format($fine,3) }}</label>
                     <span class="over-text">Gm</span>
                 </div>
 			</td>
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ $stchrg }}</label>
+                    <label class="text-dark m-auto">{{ $stchrg }}</label>
                     <span class="over-text">Rs</span>
                 </div>
 			</td>
             <td></td>
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ @$other??'-' }}</label>
+                    <label class="text-dark m-auto">{{ @$other??'-' }}</label>
                     <span class="over-text">Rs</span>
                 </div>
-			</td>
+			</td>   
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ @$rate??'-' }}</label>
+                    <label class="text-dark m-auto">{{ @$rate??'-' }}</label>
                     <span class="over-text">Rs</span>
                 </div>
 			</td>
             <td></td>
             <td>
 				<div class="over-text-container">
-                    <label class="form-control m-0">{{ @$total??'-' }}</label>
+                    <label class="text-dark m-auto">{{ @$total??'-' }}</label>
                     <span class="over-text">Rs</span>
                 </div>
 			</td>

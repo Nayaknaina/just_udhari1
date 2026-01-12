@@ -54,12 +54,12 @@
         .over-text-container > .form-control{
             padding-right:20px;
         }
-        .over-text-container > span.over-text{
+        /*.over-text-container > span.over-text{
             position:absolute;
             right:0;
             top:0;
             bottom:0;
-        }
+        }*/
 		tr.text-center > tr{
 			text-align:center;
 		}

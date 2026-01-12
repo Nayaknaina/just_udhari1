@@ -4,16 +4,162 @@
 
 @include('layouts.theme.css.datatable')
     <style>
-        /*table>thead>tr>th,table>tfoot>tr>td{
-            padding:5px!important;
-            vertical-align:middle!important;
+        :root {
+            --primary-color: #ffd30e; /* Gold */
+            --primary-dark: #e6be00;
+            --primary-light: #fffbeb;
+            --secondary-color: #1e293b; /* Dark Slate */
+            --accent-color: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
-        tbody#data_area>tr>td{
-            text-align:center;
+
+        body {
+            background-color: #f8fafc;
+            font-family: 'Inter', sans-serif;
         }
-        table>tbody>tr.foot>td{
-            padding:5px 5px!important;
-        }*/
+
+        /* Glassmorphic Card Container */
+        .glass-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative Top Border */
+        .glass-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+        }
+
+        /* Filter Inputs (Pills) */
+        .form-control-pill {
+            border-radius: 50px !important;
+            border: 1px solid #e2e8f0;
+            padding: 0.6rem 1.2rem;
+            padding-right: 2.5rem; /* Space for icon */
+            font-size: 0.9rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+            height: 45px !important; /* Fixed Height */
+            display: flex;
+            align-items: center;
+        }
+
+        .form-control-pill:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.1);
+        }
+
+        /* Search Icon Positioning */
+        .search-icon {
+            right: 15px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        /* Date Range Picker Pill */
+        .daterange-pill {
+            border-radius: 50px !important;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.6rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: auto; /* Changed from 100% */
+            min-width: 200px; /* Ensure it's not too small */
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+            height: 45px !important; /* Fixed Height */
+        }
+        
+        .daterange-pill:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        /* Select Pill */
+        select.form-control-pill {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+            appearance: none;
+            padding-right: 2rem;
+        }
+
+        /* Entries Wrapper */
+        .entries-wrapper {
+            background: #fff;
+            border-radius: 50px;
+            border: 1px solid #e2e8f0;
+            padding: 0 15px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            width: auto;
+            height: 45px !important; /* Fixed Height */
+        }
+
+    /* Search Box Wrapper */
+        .customer-input-group {
+            background: #fff;
+            border-radius: 50px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            padding: 5px;
+            transition: all 0.3s ease;
+            height: 45px; /* Match height of other inputs */
+            display: flex;
+            align-items: center;
+        }
+        
+        .customer-input-group:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(255, 211, 14, 0.15);
+        }
+
+        .input-group-prepend {
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            padding-right: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .customer-input-group .form-control {
+            border: none;
+            background: transparent;
+            height: 100%; /* Fill parent */
+            font-size: 1rem;
+            box-shadow: none;
+            padding-left: 0;
+            color: #1e293b;
+        }
+
+        /* Table Responsive Wrapper */
+        .table-responsive {
+            border-radius: 12px;
+            overflow: hidden; /* Rounded corners for table */
+        }
     </style>
 @endsection
 
@@ -27,7 +173,7 @@
 
 {{--<x-page-component :data=$data />--}}
 @php 
-$anchor = ['<a href="'.route('udhar.create').'" class="btn btn-sm btn-outline-primary"><i class="fa fa-plus"></i> New</a>','<a href="'.route('udhar.ledger').'" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list"></i> Ledger</a>'];
+$anchor = ['<a href="'.route('udhar.create').'" class="btn btn-header-light shadow-sm"><i class="fa fa-plus"></i> New</a>','<a href="'.route('udhar.ledger').'" class="btn btn-header-light shadow-sm"><i class="fa fa-list"></i> Ledger</a>'];
 $data = new_component_array('newbreadcrumb',"Udhar List") 
 @endphp 
 <x-new-bread-crumb :data=$data :anchor=$anchor/> 
@@ -36,45 +182,51 @@ $data = new_component_array('newbreadcrumb',"Udhar List")
             <div class="row">
                 <!-- left column -->
                 <div class="col-md-12">
-                    <!-- general form elements -->
-                    <div class="card card-primary">
-					{{--<div class="card-header">
-                            <h6 class="card-title col-12 p-0"><x-back-button /> Udhar Record  <a href="{{ route('udhar.create') }}" class="btn btn-sm btn-primary" style="float:right;"><li class="fa fa-plus"></li> Add New</a></h6>
-                        </div>--}}
-                        <div class="card-body row pt-2">
+                    <!-- Glassmorphic Container -->
+                    <div class="glass-container">
+                        <div class="card-body row pt-0 p-0">
                             <div class="col-12 p-0">
-                                <div class="row">
-                                    <div class="col-12 col-lg-4  form-group m-0">
-                                    <input type="text" id = "keyword" class = "form-control" placeholder = "C. name/Number/Mobile (Enter Keyword )" oninput="changeEntries()" >
-                                    </div>
-									<div class="col-md-2 col-12 form-group m-0">
-										<select name="source" id="source" class="form-control" oninput="changeEntries()" >
-											<option value="">Source?</option>
-											<option value="udhar">Udhar</option>
-											<option value="cut">Bhav Cut</option>
-											<option value="sell">Sell</option>
-										</select>
-									</div> 
-                                    <div class="col-12 col-lg-4  form-group m-0">
-                                        <div class="input-group">
-                                            <button type = "button" class = "form-control float-right  h-auto" id = "daterange-btn" >
-                                            <i class="far fa-calendar-alt" style="float:left;"></i>
-                                            <span  id="daterange-text" >Start Date - End Date</span>
-                                            <i class="fas fa-caret-down" style="float:right;"></i>
-                                            </button>
-                                            <input type="hidden" class="form-control"  id = "reportrange" value = ""  readonly >
+                                <div class="row align-items-center mb-4">
+                                    <!-- Search Keyword -->
+                                    <div class="col-auto form-group m-0 mb-2 mb-md-0">
+                                        <div class="input-group customer-input-group position-relative align-items-center" style="width: 300px;">
+                                            <div class="input-group-prepend">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                            <input type="text" id="keyword" class="form-control" placeholder="Search Customer..." oninput="changeEntries()">
                                         </div>
                                     </div>
-                                    <div class="col-md-2  form-group m-0">
+                                    
+                                    <!-- Source Select -->
+                                    <div class="col-auto form-group m-0 mb-2 mb-md-0">
+                                        <select name="source" id="source" class="form-control form-control-pill" oninput="changeEntries()" style="width: auto; min-width: 120px;">
+                                            <option value="">Source</option>
+                                            <option value="udhar">Udhar</option>
+                                            <option value="cut">Bhav Cut</option>
+                                            <option value="sell">Sell</option>
+                                        </select>
+                                    </div> 
+                                    
+                                    <!-- Date Range -->
+                                    <div class="col-auto form-group m-0 mb-2 mb-md-0">
                                         <div class="input-group">
+                                            <button type="button" class="daterange-pill" id="daterange-btn">
+                                                <span><i class="far fa-calendar-alt text-muted mr-2"></i> <span id="daterange-text">Select Date Range</span></span>
+                                                <i class="fas fa-chevron-down text-muted ml-2" style="font-size: 0.8rem;"></i>
+                                            </button>
+                                            <input type="hidden" class="form-control"  id="reportrange" value="" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Entries Dropdown -->
+                                    <div class="col-auto form-group m-0 ml-auto">
+                                        <div class="entries-wrapper">
                                             @include('layouts.theme.datatable.entry')
-                                            <div class="input-group-append">
-                                                <label class="input-group-text" >Entry</label>
-                                            </div>
+                                            <label class="ml-2 mb-0 font-weight-bold text-muted" style="font-size: 0.85rem;">Entries</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="table-responsive">  
+                                <div class="table-responsive shadow-sm">  
                                     <table id="CsTable" class="table table_theme table-bordered table-stripped">
                                         <thead>
                                             <tr class="">
@@ -128,6 +280,7 @@ $data = new_component_array('newbreadcrumb',"Udhar List")
       const loading_tr = '<tr><td colspan="17" class="text-center"><span class="p-1" style="background:lightgray;"><li class="fa fa-spinner fa-spin"></li> Loading Content..</span></td></tr>';
       function getresult(url) {
             $("#loader").show();
+            $("#CsTable").DataTable().destroy();
             $("#data_area").html(loading_tr)
 			$('tfoot').remove();
           $.ajax({
@@ -143,6 +296,7 @@ $data = new_component_array('newbreadcrumb',"Udhar List")
                 $("#loader").hide();
                 //$("#data_area").html(data.html);
                 $(document).find("tbody#data_area").replaceWith(data.html);
+                $("#CsTable").DataTable();
                 $("#paging_area").html(data.paging);
                 //$("#pagination-result").html(data.html);
               },

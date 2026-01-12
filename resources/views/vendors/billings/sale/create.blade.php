@@ -40,6 +40,12 @@
             background:#d3d3d33d;
             font-weight:bold;
         }
+        #sale_table >tfoot>tr>td>input{
+            background: transparent !important;
+            border: none;
+            /* color:white; */
+   
+        }
     </style>
   <section class = "content">
     <div class = "container-fluid">

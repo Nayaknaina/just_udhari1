@@ -1,148 +1,365 @@
 @extends('layouts.vendors.app')
 
 @section('css')
+<style>
+    :root {
+        --primary-color: #ffd30e; /* Gold */
+        --primary-dark: #bfa300;
+        --secondary-color: #1e293b; /* Dark Slate */
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --warning-color: #f59e0b;
+        --light-bg: #f8fafc;
+        --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --radius: 1rem;
+    }
 
-<style>
-    .udhar_block  div.form-group>label{
-        font-size:80%;
-        margin-bottom:1px;
+    body {
+        background-color: #e0e0e4;
+        font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
     }
-    .udhar_block div.form-group{
-        margin-bottom:2px;
+
+    /* General Card Styling */
+    .card {
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: var(--radius);
+        box-shadow: var(--card-shadow);
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
     }
-    .udhar_block div.form-group>input,
-    .udhar_block div.form-group div.input-group>span>input{
-        padding:2px 15px;
-        height:auto!important;
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
     }
-    .udar_block_head{
-        border-bottom:1px dashed gray;
+
+    .card-header {
+        background: transparent;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        font-weight: 700;
+        padding: 1.25rem 1.5rem;
+        letter-spacing: 0.5px;
     }
-    #bhav_cut_table > thead > tr >th,#bhav_cut_table > tbody > tr >td{
-        padding:0;
-        border:0;
+
+    .form-control {
+        border-radius: 0.75rem;
+        border: 2px solid #e2e8f0;
+        padding: 0.625rem 0.875rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        background-color: #fff;
     }
-    #bhav_cut_table > thead > tr >th>input,#bhav_cut_table > tbody > tr >td>input{
-        padding:2px 25px 2px 5px;
-        height:auto!important;
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(255, 211, 14, 0.2);
     }
-    #bhav_cut_table > tbody > tr >td>div.input-group >input {
-        padding:2px 10px;
-        height:auto!important;
+
+    /* Customer Select Section - Glassmorphism & Compact */
+    /* Customer Select Section - Glassmorphism & Compact */
+    .customer-section {
+        background: rgba(255, 255, 255, 0.9); /* More sleek/premium white */
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        margin-bottom: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 1);
+        border-bottom: 3px solid rgba(255, 77, 0, 0.35); /* Premium Orange Border */
+        /* Added negative Y offset for top shadow */
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 -5px 15px -5px rgba(0, 0, 0, 0.05); 
+        position: relative; 
+        z-index: 50;
     }
-    #bhav_cut_table > tbody > tr >td>div.input-group >div> select{
-        padding:2px 2px;
-        height:auto!important;
+
+    /* Distinct Search Box Wrapper */
+    .customer-input-group {
+        background: #fff; /* Solid white background */
+        border-radius: 50px; /* Pill shape for the input itself */
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); /* Subtle shadow inner */
+        padding: 5px; /* Padding for the inner elements */
+        transition: all 0.3s ease;
     }
-    tr>td.equal_sign{
-        position:relative;
-        padding:0 10px;
-        width:15%;
+    
+    .customer-input-group:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(255, 211, 14, 0.15);
+        transform: translateY(-1px);
     }
-    tr>td.equal_sign:after{
-        position:absolute;
-        content:":";
-        right:0;
+
+    /* Search Icon Container */
+    .input-group-prepend {
+        display: flex;
+        align-items: center;
+        padding-left: 15px;
+        padding-right: 10px; /* Added spacing */
+        color: var(--secondary-color);
+        height: 100%;
     }
-</style>
-<style>
+    
+    .customer-input-group .form-control {
+        border: none;
+        background: transparent;
+        height: 45px;
+        line-height: 45px;
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: none;
+        padding-left: 0; /* padding handled by prepend container margin/padding */
+        color: #1e293b;
+        display: flex; 
+        align-items: center;
+    }
+    
+    .customer-input-group .btn {
+        height: 45px;
+        padding: 0 1.5rem;
+        background: #1e293b; 
+        color: #ffd30e;
+        border-radius: 50px !important;
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        box-shadow: none;
+        transition: all 0.2s;
+    }
+    
+    .customer-input-group .btn:hover {
+        background: #0f172a;
+        transform: scale(1.02);
+    }
+    
+    .section-label {
+        font-size: 0.75rem; 
+        color: #64748b;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        display: block; /* Bring back label for clarity */
+    }
+
+    /* Date Filter Compact */
+    .date-compact {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        height: auto;
+        width: auto;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .date-compact:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(255, 211, 14, 0.2);
+    }
+
+    /* Header Action Buttons (List/Ledger) */
+    .btn-header-light {
+        background: white;
+        color: #1e293b;
+        border: 1px solid #cbd5e1;
+        border-radius: 50px !important;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .btn-header-light:hover {
+        background: #f1f5f9; /* Light Gray on hover */
+        color: #0f172a; /* Darker text */
+        border-color: #94a3b8;
+        transform: translateY(-1px);
+    }
+
+    /* Customer Dropdown */
     #customerlist {
         list-style-type: none;
-        padding: 0;
+        padding: 0.5rem 0;
         margin: 0;
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        width: 200px;
+        background-color: white;
+        border: none;
+        border-radius: 0.75rem;
+        width: 100%;
         display: none;
         position: absolute;
-        z-index: 100;
-        max-height:50vh;
-        height:auto;
-        min-width:auto;
-        overflow-x:scroll;
-        box-shadow: 1px 2px 3px gray
-    }
-    #customerlist.active{
-        display:block;
-    }
-    #customerlist li {
-        padding: 10px;
-        cursor: pointer;
-        text-wrap:wrap;
+        z-index: 1000;
+        max-height: 300px;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        top: 100%;
+        margin-top: 10px;
     }
 
-    #customerlist li.hover,#customerlist li:hover {
-        background-color: #ddd;
+    #customerlist.active {
+        display: block;
     }
-    .unit{
-        position:relative;
+
+    #customerlist li {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        color: #1e293b;
+        border-bottom: 1px solid #f1f5f9;
+        font-weight: 500;
+        transition: background 0.15s;
     }
-    .unit:after{
-        position:absolute;
-        right:0;
-        bottom:2px;
-        padding:0 2px;
-        /* color:gray; */
-        /* top: 0; */
-        align-content: center;
+
+    #customerlist li:last-child {
+        border-bottom: none;
     }
-    .unit.gm_unit:after{
-        content:"gm";
+
+    #customerlist li:hover, #customerlist li.hover {
+        background-color: #fefce8; /* Light yellow bg */
+        color: var(--primary-dark);
+        font-weight: 600;
     }
-    .unit.per_gm_unit:after{
-        content:"/gm";
+    
+    /* Transaction Blocks */
+    .transaction-card {
+        background: white;
     }
-    .unit.rs_unit:after{
-        content:"₹";
-        padding-right:15px;
-        font-size:120%;
-        right:2px;
+
+    .transaction-card .card-body {
+        padding: 0.75rem; /* Reduced padding */
     }
-    #loader{
-        position:absolute;
-        width:100%;
-        height:100%;
-        top:0;
-        left:0;
-        background: #0009;
-        z-index:3;
-        color: orange;
-        font-size: 150%;
-        padding:40% 0;
-        display:none;
+
+    .transaction-card .card-header {
+        padding: 0.75rem 1rem; /* Compact Header */
     }
-    .metal.gold,.metal.silver{
-        display:none;
+    
+    .block-cash { border-top: 4px solid var(--success-color); }
+    .block-gold { border-top: 4px solid var(--warning-color); }
+    .block-silver { border-top: 4px solid #94a3b8; }
+
+    /* Cash Block */
+    .block-cash .card-header { color: var(--success-color); }
+    .block-cash .u-label { color: var(--success-color); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;}
+    
+    /* Gold Block */
+    .block-gold .card-header { color: var(--warning-color); }
+    .block-gold .u-label { color: var(--warning-color); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;}
+
+    /* Silver Block */
+    .block-silver .card-header { color: #475569; }
+    .block-silver .u-label { color: #64748b; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;}
+
+    /* Inputs within blocks */
+    .udhar_block .form-group {
+        margin-bottom: 0.75rem; /* Reduced margin */
     }
-    .block_at_bhav_cut.active{
+
+    /* Premium Input Wrapper */
+    .input-wrapper {
         position: relative;
+        background-color: #f8fafc; /* Subtle gray bg */
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
     }
-    .block_at_bhav_cut.active:after{
-        content:" ";
-        width:100%;
-        height:100%;
+    
+    .input-wrapper:focus-within {
+        background-color: #fff;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(255, 211, 14, 0.15);
+        transform: translateY(-1px);
+    }
+
+    /* Input inside wrapper */
+    .input-wrapper .form-control {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding-right: 45px; /* Space for unit */
+        height: 30px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .unit-badge {
         position: absolute;
-        top:0;
-        left:0;
-        background:#00000014;
-        z-index:25;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #e2e8f0;
+        color: #64748b;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 700;
+        pointer-events: none;
+        letter-spacing: 0.5px;
     }
-    input:focus,select:focus{
-        box-shadow: -2px 5px 5px gray!important;
+
+    .form-control[readonly] {
+        background-color: transparent; /* Parent wrapper handles bg */
+        color: #64748b;
     }
-    #bhav_cut_table > tbody > tr >td{
-        min-width:100px;
-        width:auto;
+    
+    .text-danger { color: #ef4444 !important; }
+    .text-success { color: #10b981 !important; }
+    
+    /* Specific Border/Text Colors for focused/active states */
+    .input-wrapper:focus-within:has(.text-danger) {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
     }
-	label#bhaw_cut_button{
-        position:absolute;
-        right:10px;
-        z-index:1;
+    
+    .input-wrapper:focus-within:has(.text-success) {
+        border-color: #10b981;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
     }
-    @media only screen and (max-width: 768px){
-        label#bhaw_cut_button{
-            position:inherit;
-            margin:auto!important;
+    
+    .border-danger { border-color: transparent !important; } /* Override default form control border */
+    .border-success { border-color: transparent !important; }
+
+    /* Bhav Cut Section */
+    .bhav-cut-wrapper {
+        background: white;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border-top: 4px solid #ff4d00;
+        display: none;
+        margin-top: 1.5rem;
+    }
+
+    #bhav_cut_table th, #bhav_cut_table td {
+        vertical-align: middle;
+        padding: 0.75rem;
+        border-color: #e2e8f0;
+        color: #1e293b !important; /* Force black text */
+    }
+
+    #bhav_cut_table input {
+        text-align: center;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .toggle_button {
+        border-radius: 50px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+
+    
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+        .customer-section {
+            padding: 1.5rem;
         }
     }
 </style>
@@ -150,291 +367,371 @@
 
 @section('content')
 
-@php
-
-//$data = component_array('breadcrumb' , 'New Udhari',[['title' => 'New Udhari']] ) ;
-
-@endphp
-
-{{--<x-page-component :data=$data />--}}
 @php 
-$anchor = ['<a href="'.route('udhar.index').'" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list"></i> List</a>','<a href="'.route('udhar.ledger').'" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list"></i> Ledger</a>'];
+$anchor = ['<a href="'.route('udhar.index').'" class="btn btn-sm btn-light text-primary fw-bold shadow-sm"><i class="fa fa-list"></i> List</a>','<a href="'.route('udhar.ledger').'" class="btn btn-sm btn-light text-primary fw-bold shadow-sm"><i class="fa fa-book"></i> Ledger</a>'];
 $data = new_component_array('newbreadcrumb',"New Udhar") 
 @endphp 
 <x-new-bread-crumb :data=$data :anchor=$anchor/> 
     
-    <section class="content">
-        <div class="container-fluid p-0">
-            <div class="row">
-                <!-- left column -->
-                <div class="col-md-12">
-                    <!-- general form elements -->
-                    <div class="card card-primary" style="border-top:1px dashed #ff2300;;">
-                        <!-- <div class="card-header">
-                            <h6 class="card-title col-12 p-0">New Udhari  <a href="#" class="btn btn-sm btn-primary" style="float:right;"><li class="fa fa-list-ol"></li></a></h6>
-                        </div> -->
-                        <form id="udhar_form" action="{{ route('udhar.store') }}" role="form" autocomplete="off">
-                            @csrf
-                            <div class="card-body pt-2" id="form_container">
-                                <div class="row block_at_bhav_cut">
-                                    <div class="col-md-6 col-10 p-2">
-                                        <div class="row">
-                                            <div class="input-group col-md-12">
-                                                <div class="input-group">
-                                                    <input type="text" name="name" id="name" class="form-control myselect placeholdertolabel h-auto" placeholder="CustomerNo./Name/Mobile" oninput="getcustomer($(this))">
-                                                    <input type="hidden" name="custo_id" value="">
-                                                    <input type="hidden" name="udhar_id" value="">
-                                                    <ul id="customerlist" class="w-100">
-                                                    </ul>
-                                                    <div class="input-group-append">
-                                                        <!-- <button class="btn btn-outline-secondary m-0" type="button"><i class="fa fa-caret-down"></i></button> -->
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#custo_modal">
-                                                        <i class="fa fa-plus"></i>
-                                                        </button>
+    <section class="content pb-5">
+        <div class="container-fluid">
+            
+            <form id="udhar_form" action="{{ route('udhar.store') }}" role="form" autocomplete="off">
+                @csrf
+                
+                <!-- Customer Selection Hero -->
+                <div class="row block_at_bhav_cut">
+                    <div class="col-12">
+                        <div class="customer-section">
+                            <div class="row align-items-end">
+                                <div class="col-lg-6 col-12 mb-3 mb-lg-0">
+                                    <!-- <label class="section-label">Select Customer</label> -->
+                                    <div class="input-group customer-input-group position-relative align-items-center">
+                                        <div class="input-group-prepend">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" name="name" id="name" class="form-control myselect" placeholder="Search by Name or Mobile..." oninput="getcustomer($(this))">
+                                        <input type="hidden" name="custo_id" value="">
+                                        <input type="hidden" name="udhar_id" value="">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn" data-toggle="modal" data-target="#custo_modal">
+                                                New <i class="fa fa-plus-circle ml-2"></i>
+                                            </button>
+                                        </div>
+                                        <ul id="customerlist"></ul>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 text-lg-right text-left d-flex align-items-center justify-content-lg-end justify-content-start mt-2 mt-lg-0">
+                                    <a href="{{ route('udhar.index') }}" class="btn btn-header-light mr-2 d-flex align-items-center justify-content-center shadow-sm">
+                                        <i class="fa fa-list mr-2" style="color: #64748b;"></i> List
+                                    </a>
+                                    <a href="{{ route('udhar.ledger') }}" class="btn btn-header-light d-flex align-items-center justify-content-center shadow-sm">
+                                        <i class="fa fa-book mr-2" style="color: #64748b;"></i> Ledger
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                                        <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#custo_modal"  class="btn btn-warning m-0" type="button"><i class="fa fa-plus" style="vertical-align: bottom;"></i></a> -->
-                                                    </div>
-                                                </div>
-                                            </div>
+                <!-- Transaction Blocks -->
+                <div class="row block_at_bhav_cut">
+                    
+                    <!-- Cash Block -->
+                    <div class="col-lg-5 col-md-12 mb-4">
+                        <div class="card transaction-card block-cash h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="h5 m-0"><i class="fa fa-money-bill-wave mr-2"></i> Cash Transaction</span>
+                                <img src="{{ asset('main/assets/cstm_imgs/game-icons_take-my-money.svg') }}" alt="Money" width="24" height="24" style="opacity: 0.6">
+                            </div>
+                            <div class="card-body udhar_block bg-white">
+                                <div class="row">
+                                    <!-- Old -->
+                                    <div class="col-12 form-group">
+                                        <label class="u-label">Previous Balance</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" class="form-control cash_block" name="cash_old" readonly>
+                                            <span class="unit-badge">₹</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-2 text-center p-2">
-                                        <a href="#" class="btn btn-primary form-control w-auto h-auto" id="custo_txn_jump" style="line-height: normal;">
-											<i class="fa fa-book" style="vertical-align:bottom;" ></i>
-										</a>
-										{{-- <a href="{{ route('udhar.index') }}" class="btn btn-primary form-control w-auto mb-3"><i class="fa fa-list" style="vertical-align:bottom;"></i></a>--}}
-                                    </div>
-									<div class="form-group offset-md-2 col-md-2 p-2">
-                                        <input type="date" class="form-control text-center text-secondary" id="date" name="date" value="{{ date('Y-m-d',strtotime('now')) }}" style="border:1px solid  #f95600;font-weight:bold;">
-                                    </div>
-                                </div>
-                                <div class="row block_at_bhav_cut" >
-                                    <div class="col-md-5 col-12 m-0">
-                                        <div class="card border-dark">
-                                            <div class="card-header text-center p-1 udar_block_head">
-                                                <h3 class="card-title col-12 text-dark">Cash 
-                                                    <img src="{{ asset('main/assets/cstm_imgs/game-icons_take-my-money.svg') }}" alt="Money Icon" width="30" height="30">
-                                                </h3>
-                                            </div>
-                                            <div class="card-body udhar_block">
-                                                <div class="row">
-                                                    <div class="form-group unit rs_unit col-12">
-                                                        <label for="old_cash" >Old</label>
-                                                        <input type="text" class="form-control cash_block" name="cash_old" placeholder="" readonly>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group row">
-                                                            <label for="old_cash" class="text-danger col-12">Udhar/Out(-)</label>
-                                                            <div class="input-group">
-                                                                <span class="col-6   unit rs_unit">
-                                                                    <input type="text" class="form-control cash_block border-danger  text-danger udhar_input_field" name="cash_out_off"  data-target="cash"  placeholder="Cash">
-                                                                </span>
-                                                                <span class="col-6  unit rs_unit">
-                                                                    <input type="text" class="form-control cash_block border-danger  text-danger udhar_input_field" name="cash_out_on"  data-target="cash"  placeholder="Online">
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group row">
-                                                        <label for="old_cash" class="text-success col-12">Jama/In(+)</label>
-                                                            <div class="input-group">
-                                                                <span class="col-6   unit rs_unit">
-                                                                    <input type="text" class="form-control cash_block border-success  text-success udhar_input_field" name="cash_in_off"   data-target="cash"   placeholder="Cash">
-                                                                </span>
-                                                                <span class="col-6  unit rs_unit">
-                                                                    <input type="text" class="form-control cash_block border-success  text-success udhar_input_field" name="cash_in_on"   data-target="cash"   placeholder="Online">
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group unit rs_unit col-12">
-                                                        <label for="old_cash">Final</label>
-                                                        <input type="text" class="form-control cash_block" name="cash_final" placeholder="" readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-7">
+                                    
+                                    <!-- Udhar/Out -->
+                                    <div class="col-12 form-group">
+                                        <label class="u-label text-danger">Udhar / Given (-)</label>
                                         <div class="row">
-                                            <div class="col-md-6 col-12 mb-3">
-                                                <div class="card border-dark">
-                                                    <div class="card-header text-center p-1 udar_block_head">
-                                                        <h3 class="card-title col-12 text-dark">
-                                                            Gold
-                                                            <!-- <i style="color:#fa9933;font-size: 150%">&#10022;</i> -->
-                                                            <i style="color:#fa9933;font-size: 150%;">&#10023;</i>
-                                                        </h3>
-                                                    </div>
-                                                    <div class="card-body udhar_block">
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash" >Old</label>
-                                                            <input type="text" class="form-control gold_block" name="gold_old" placeholder="" readonly>
-                                                        </div>
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash" class="text-danger">Udhar/Out(-)</label>
-                                                            <input type="text" class="form-control gold_block border-danger  text-danger udhar_input_field" name="gold_out_off"  data-target="gold"  placeholder="">
-                                                        </div>
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash" class="text-success">Jama/In(+)</label>
-                                                            <input type="text" class="form-control gold_block border-success  text-success udhar_input_field" name="gold_in_off" data-target="gold" placeholder="">
-                                                        </div>
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash">Final</label>
-                                                            <input type="text" class="form-control gold_block" name="gold_final" placeholder="" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div> 
+                                            <div class="col-6 pr-1">
+                                                <div class="input-wrapper">
+                                                    <input type="text" class="form-control cash_block border-danger text-danger udhar_input_field" name="cash_out_off" data-target="cash" placeholder="Cash">
+                                                    <span class="unit-badge">₹</span>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6 col-12 mb-3">
-                                                <div class="card border-dark">
-                                                    <div class="card-header text-center p-1 udar_block_head">
-                                                        <h3 class="card-title col-12 text-dark">
-                                                            Silver
-                                                            <!-- <i style="color:#cdcdcd;font-size: 150%">&#10022;</i> -->
-                                                            <i style="color:#cdcdcd;font-size: 150%">&#10023;</i>
-                                                        </h3>
-                                                    </div>
-                                                    <div class="card-body udhar_block">
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash" >Old</label>
-                                                            <input type="text" class="form-control silver_block" name="silver_old" placeholder="" readonly>
-                                                        </div>
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash" class="text-danger">Udhar/Out(-)</label>
-                                                            <input type="text" class="form-control silver_block border-danger text-danger udhar_input_field" name="silver_out_off" data-target="silver" placeholder="">
-                                                        </div>
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash" class="text-success">Jama/In(+)</label>
-                                                            <input type="text" class="form-control silver_block border-success  text-success udhar_input_field" name="silver_in_off" data-target="silver" placeholder="">
-                                                        </div>
-                                                        <div class="form-group unit gm_unit">
-                                                            <label for="old_cash">Final</label>
-                                                            <input type="text" class="form-control silver_block" name="silver_final" placeholder="" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row"  id="bottom_block" style="display:;">
-									<label class="btn btn-secondary toggle_button m-2"  for="chav_cut_check" style="border-radius:15px;" id="bhaw_cut_button">
-										Bhav Cut <i class="fa fa-caret-down"></i>
-										<input type="checkbox" name="bhav_cut" value="yes" id="chav_cut_check" style="display:none;" onchange="$('#bhav_cut').toggle('fade');$(this).closest('label').toggleClass('btn-secondary btn-outline-secondary');">
-									</label>
-                                    <div class="col-md-8 text-center p-2 offset-md-2"  id="bhav_cut" style="border:1px solid gray;display:none;">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="table-responsive border-dark py-3">
-                                                    <table class="table table-bordered m-0" id="bhav_cut_table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th></th>
-                                                                <th colspan="2">
-                                                                    <label class="form-control border-secondary m-0" style="border-radius:15px;">CASH</label>
-                                                                </th>
-                                                                <th></th>
-                                                                <th colspan="2">
-                                                                    <div class="dropdown show">
-                                                                        <select name="conver_into" class="form-control border-secondary text-center m-0" style="font-weight:bold;">
-                                                                            <option value="">GOLD/SILVER</option>
-                                                                            <option value="gold">Gold</option>
-                                                                            <option value="silver">Silver</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="equal_sign">Final </td>
-                                                                <td></td>
-                                                                <td class="unit rs_unit">
-                                                                <input type="text" class="form-control bhav_final_udhar  text-center" name="bhav_final_udhar"  id="bhav_final_udhar" placeholder="" readonly>
-                                                                </td>
-                                                                <td></td>
-                                                                <td class="unit gm_unit">
-                                                                    <input type="text" class="form-control bhav_final_cnvrt  text-center" id="bhav_final_cnvrt" name="bhav_final_cnvrt" placeholder="" readonly>
-                                                                </td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="equal_sign" >Exchange</td>
-                                                                <td class="text-right">
-                                                                    <label class="btn btn-sm btn-outline-warning m-0 bhav_cnvrt_btn" id="bhav_cnvrt_left" for="direction_amount">
-                                                                        <
-                                                                        <input type="radio" id="direction_amount" name="direction" value="amount" style="display:none;">
-                                                                    </label>
-                                                                </td>
-                                                                <td class="unit rs_unit">
-                                                                    <input type="text" class="form-control bhav_cnvrt_from  text-center convert_source" name="bhav_cnvrt_from"  id="bhav_cnvrt_from" placeholder="" style="color:blue;" >
-                                                                </td>
-                                                                <td style="min-width:150px;">
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control bhav_cnvrt_rate text-info text-center" name="bhav_cnvrt_rate"  id="bhav_cnvrt_rate" placeholder="" >
-                                                                        <div class="input-group-append ">
-                                                                            <select name="cnvrt_unit" class="form-control text-right" style="font-size: 80%;font-weight: bold;"> 
-                                                                                <option value="" class="metal">Unit</option>
-                                                                                <option value="1" class="gold metal gold_1">/1gm </option>
-                                                                                <option value="10" class="gold metal gold_10">/10gm</option>
-                                                                                <option value="1" class="silver metal silver_1">/1kg</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="unit gm_unit">
-                                                                    <input type="text" class="form-control bhav_cnvrt_to  text-center convert_source" name="bhav_cnvrt_to"  id="bhav_cnvrt_to" placeholder="" style="color:blue;" >
-                                                                </td>
-                                                                <td class="text-left">
-                                                                    <label class="btn btn-sm btn-outline-warning m-0 bhav_cnvrt_btn" id="bhav_cnvrt_right" for="direction_metal"> 
-                                                                        <input type="radio" id="direction_metal" name="direction" value="metal" style="display:none;" >
-                                                                        >
-                                                                    </label>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td class="unit rs_unit">
-                                                                <input type="text" class="form-control bhav_udhar_money  text-center" name="bhav_udhar_money"  id="bhav_udhar_money" placeholder="" readonly>
-                                                                </td>
-                                                                <td></td>
-                                                                <td class="unit gm_unit">
-                                                                    <input type="text" class="form-control bhav_udhar_metal text-center" name="bhav_udhar_metal"  id="bhav_udhar_metal" placeholder="" readonly>
-                                                                </td>
-                                                                <td></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                            <div class="col-6 pl-1">
+                                                <div class="input-wrapper">
+                                                    <input type="text" class="form-control cash_block border-danger text-danger udhar_input_field" name="cash_out_on" data-target="cash" placeholder="Online">
+                                                    <span class="unit-badge">₹</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 text-center pt-2 mt-2" style="border-top:1px solid lightgray;">
-										<div class="col-12 p-0">
-											<label><input type="text" class="form-control" id="remark" name="remark" value="" placeholder="Remark here"></label>
-										</div>
-										
-                                        <!--<label class="btn btn-secondary toggle_button m-2"  for="chav_cut_check" style="border-radius:15px;">
-                                            Bhav Cut <i class="fa fa-caret-down"></i>
-                                            <input type="checkbox" name="bhav_cut" value="yes" id="chav_cut_check" style="display:none;" onchange="$('#bhav_cut').toggle('fade');$(this).closest('label').toggleClass('btn-secondary btn-outline-secondary');">
-                                        </label>-->
-                                        <button type="submit" name="action" value="print" class="btn btn-outline-warning m-2">Print <i class="fa fa-print"></i></button>
-                                        <button type="submit" name="action" value="done" class="btn btn-success m-2">Save <i class="fa fa-save"></i></button>
+
+                                    <!-- Jama/In -->
+                                    <div class="col-12 form-group">
+                                        <label class="u-label text-success">Jama / Received (+)</label>
+                                        <div class="row">
+                                            <div class="col-6 pr-1">
+                                                <div class="input-wrapper">
+                                                    <input type="text" class="form-control cash_block border-success text-success udhar_input_field" name="cash_in_off" data-target="cash" placeholder="Cash">
+                                                    <span class="unit-badge">₹</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 pl-1">
+                                                <div class="input-wrapper">
+                                                    <input type="text" class="form-control cash_block border-success text-success udhar_input_field" name="cash_in_on" data-target="cash" placeholder="Online">
+                                                    <span class="unit-badge">₹</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Final -->
+                                    <div class="col-12 form-group mb-0">
+                                        <label class="u-label">Net Closing Balance</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" class="form-control input-lg cash_block" name="cash_final" readonly style="font-size: 1.1em;">
+                                            <span class="unit-badge">₹</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                        <div class="text-center" id="loader">
-                            <span class=""><i class="fa fa-spinner fa-spin"></i>Please Wait...</span>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
-            </div><!-- /.container-fluid -->
-        </div><!-- /.container-fluid -->
+
+                    <!-- Metal Blocks -->
+                    <div class="col-lg-7 col-md-12">
+                        <div class="row">
+                            <!-- Gold -->
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="card transaction-card block-gold h-100">
+                                    <div class="card-header">
+                                        <span class="h5 m-0"><i class="fa fa-ring mr-2"></i> Gold</span>
+                                    </div>
+                                    <div class="card-body udhar_block bg-white">
+                                        <div class="form-group">
+                                            <label class="u-label">Old Balance</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control gold_block" name="gold_old" readonly>
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="u-label text-danger">Given (-)</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control gold_block border-danger text-danger udhar_input_field" name="gold_out_off" data-target="gold">
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="u-label text-success">Received (+)</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control gold_block border-success text-success udhar_input_field" name="gold_in_off" data-target="gold">
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label class="u-label">Net Balance</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control gold_block" name="gold_final" readonly style="font-size: 1.1em;">
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Silver -->
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="card transaction-card block-silver h-100">
+                                    <div class="card-header">
+                                        <span class="h5 m-0"><i class="fa fa-coins mr-2"></i> Silver</span>
+                                    </div>
+                                    <div class="card-body udhar_block bg-white">
+                                        <div class="form-group">
+                                            <label class="u-label">Old Balance</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control silver_block" name="silver_old" readonly>
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="u-label text-danger">Given (-)</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control silver_block border-danger text-danger udhar_input_field" name="silver_out_off" data-target="silver">
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="u-label text-success">Received (+)</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control silver_block border-success text-success udhar_input_field" name="silver_in_off" data-target="silver">
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label class="u-label">Net Balance</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="form-control silver_block" name="silver_final" readonly style="font-size: 1.1em;">
+                                                <span class="unit-badge">gm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+
+                <!-- Footer / Bhav Cut Section -->
+                <!-- Footer / Bhav Cut Section -->
+                <!-- Footer / Bhav Cut Section -->
+                <!-- Footer / Bhav Cut Section -->
+                <div class="row justify-content-center">
+                    <div class="col-12 w-100 p-0">
+                        <!-- Top Row: Bhav Cut Toggle (Right Aligned) -->
+                        <!--<div class="text-right mb-2">
+                             <label class="btn btn-secondary toggle_button shadow-sm" for="chav_cut_check" id="bhaw_cut_button">
+                                <span>Bhav Cut</span> <i class="fa fa-chevron-down ml-2"></i>
+                                <input type="checkbox" name="bhav_cut" value="yes" id="chav_cut_check" style="display:none;" onchange="$('#bhav_cut').slideToggle(); $(this).closest('label').toggleClass('btn-secondary btn-outline-secondary');">
+                            </label>
+                        </div>-->
+                        <!-- Top Row: Bhav Cut Toggle (Right Aligned) -->
+                        <div class="text-right mb-2">
+                             <!-- Note: Using absolute position as per user previous edit -->
+                             <!-- Added ID for text and icon spans to target them easily -->
+                             <label class="btn btn-secondary toggle_button shadow-sm mt-2" for="chav_cut_check" id="bhaw_cut_button" style="position:absolute; right:0; transition: all 0.3s ease; z-index: 100;">
+                                <span id="bhav_text">Bhav Cut</span> 
+                                <i id="bhav_icon" class="fa fa-chevron-down ml-2"></i>
+                                <input type="checkbox" name="bhav_cut" value="yes" id="chav_cut_check" style="display:none;" 
+                                    onchange="
+                                        $('#bhav_cut').slideToggle(); 
+                                        var btn = $(this).closest('label');
+                                        btn.toggleClass('btn-secondary btn-outline-secondary');
+                                        if(this.checked){
+                                            $('#bhav_text').text('');
+                                            $('#bhav_icon').removeClass('fa-chevron-down ml-2').addClass('fa fa-minus');
+                                            btn.css({'padding': '0.2rem 0.6rem', 'font-size': '0.9rem', 'z-index': '1000'}); // Make smaller and higher z-index
+                                        } else {
+                                            $('#bhav_text').text('Bhav Cut');
+                                            $('#bhav_icon').removeClass('fa-minus').addClass('fa fa-chevron-down ml-2');
+                                             btn.css({'padding': '', 'font-size': '', 'z-index': '100'}); // Reset styles
+                                        }
+                                    ">
+                            </label>
+                        </div>
+                        <!-- Hidden Bhav Cut Table -->
+                        <div id="bhav_cut" class="bhav-cut-wrapper text-left my-0 mx-auto mb-2" style="max-width: 100%;">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0" id="bhav_cut_table">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th width="15%">Action</th>
+                                                <th width="10%"></th>
+                                                <th width="25%" class="text-center">CASH</th>
+                                                <th width="20%"></th>
+                                                <th width="25%">
+                                                    <select name="conver_into" class="form-control border-0 bg-transparent font-weight-bold text-center p-0" style="color: #1e293b;">
+                                                        <option value="">SELECT METAL...</option>
+                                                        <option value="gold">GOLD</option>
+                                                        <option value="silver">SILVER</option>
+                                                    </select>
+                                                </th>
+                                                <th width="5%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="font-weight-bold">Final Balance</td>
+                                                <td></td>
+                                                <td>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" class="form-control bhav_final_udhar text-center" name="bhav_final_udhar" id="bhav_final_udhar" readonly>
+                                                        <span class="unit-badge">₹</span>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" class="form-control bhav_final_cnvrt text-center" id="bhav_final_cnvrt" name="bhav_final_cnvrt" readonly>
+                                                        <span class="unit-badge">gm</span>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-weight-bold">Exchange</td>
+                                                <td class="text-right">
+                                                    <label class="btn btn-sm btn-outline-warning bhav_cnvrt_btn rounded-circle" id="bhav_cnvrt_left" for="direction_amount" style="width: 35px; height: 35px; padding: 0; line-height: 35px;">
+                                                        <i class="fa fa-arrow-left"></i>
+                                                        <input type="radio" id="direction_amount" name="direction" value="amount" style="display:none;">
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" class="form-control bhav_cnvrt_from text-center convert_source" name="bhav_cnvrt_from" id="bhav_cnvrt_from" placeholder="Amount" style="background: transparent;">
+                                                        <span class="unit-badge">₹</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control bhav_cnvrt_rate text-center" name="bhav_cnvrt_rate" id="bhav_cnvrt_rate" placeholder="Rate">
+                                                        <div class="input-group-append">
+                                                            <select name="cnvrt_unit" class="form-control small" style="width: 70px; padding: 0 5px;"> 
+                                                                <option value="" class="metal">Units</option>
+                                                                <option value="1" class="gold metal gold_1">/1gm</option>
+                                                                <option value="10" class="gold metal gold_10">/10gm</option>
+                                                                <option value="1" class="silver metal silver_1">/1kg</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" class="form-control bhav_cnvrt_to text-center convert_source" name="bhav_cnvrt_to" id="bhav_cnvrt_to" placeholder="Weight" style="background: transparent;">
+                                                        <span class="unit-badge">gm</span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-left">
+                                                    <label class="btn btn-sm btn-outline-warning bhav_cnvrt_btn rounded-circle" id="bhav_cnvrt_right" for="direction_metal" style="width: 35px; height: 35px; padding: 0; line-height: 35px;">
+                                                        <input type="radio" id="direction_metal" name="direction" value="metal" style="display:none;" >
+                                                        <i class="fa fa-arrow-right"></i>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-weight-bold text-muted">Remaining</td>
+                                                <td></td>
+                                                <td>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" class="form-control bhav_udhar_money text-center" name="bhav_udhar_money" id="bhav_udhar_money" readonly style="background: transparent;">
+                                                        <span class="unit-badge">₹</span>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" class="form-control bhav_udhar_metal text-center" name="bhav_udhar_metal" id="bhav_udhar_metal" readonly style="background: transparent;">
+                                                        <span class="unit-badge">gm</span>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+
+                        <!-- Bottom Row: Remark & Action Buttons (Inline & Compact) -->
+                        <div class="d-flex flex-wrap justify-content-center align-items-center mt-2">
+                            <div class="form-group mb-0 mx-2" style="min-width: 350px;">
+                                <input type="text" class="form-control text-center" id="remark" name="remark" placeholder="Add a note/remark for this transaction..." style="border-style: dashed; background: transparent;">
+                            </div>
+                            <div class="mx-2">
+                                <button type="submit" name="action" value="print" class="btn btn-outline-secondary btn-lg m-1 px-4 shadow-sm" style="border-radius: 50px;">
+                                    <i class="fa fa-print"></i> Print
+                                </button>
+                                <button type="submit" name="action" value="done" class="btn btn-primary btn-lg m-1 px-5 shadow-lg" style="border-radius: 50px;">
+                                    <i class="fa fa-save"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            
+        </div>
     </section>
     @php $from = 4 @endphp
     @include('vendors.commonpages.newcustomerwithcategory')
