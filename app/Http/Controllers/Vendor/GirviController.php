@@ -127,10 +127,7 @@ class GirviController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        // echo '<pre>';
-        // print_r($request->toArray());
-        // echo '</pre>';
-        // exit();
+        // ... (logging commented out) ...
 
         $rules = [
             "custo"=>"required|numeric",
@@ -173,6 +170,10 @@ class GirviController extends Controller
                     $msgs["item.*.required"] = "Select The Item First !";
                     break;
                 case "return":
+                    $rules["return_items"] = "required|array";
+                    $rules["return_items.*.id"] = "required|numeric";
+                    $rules["return_items.*.action"] = "required|in:release,part,interest";
+                    $msgs["return_items.required"] = "No items selected for return!";
                     break;
                 default:
                     $rules["valuation"]="required|numeric";
@@ -249,6 +250,9 @@ class GirviController extends Controller
             switch($request->operation){
                 case 'interest':
                     return $this->payinterest($request);
+                    break;
+                case 'return':
+                    return $this->processReturn($request);
                     break;
                 default:
                     return $this->savegirvi($request);
@@ -367,6 +371,13 @@ class GirviController extends Controller
                     $item['branch_id'] = $branch_id;
                     GirvyItem::create($item);
                 }
+                $remark = "Amount Released !";
+                if($request->medium == 'mix') {
+                     $c = $request->split_cash ?? 0;
+                     $o = $request->split_online ?? 0;
+                     $remark .= " (Split: Cash $c, Online $o)";
+                }
+
                 $txn_arr = [
                     "girvi_custo_id"=>$girvi_custo->id,
                     "girvi_batch_id"=>$batch->id,
@@ -374,9 +385,9 @@ class GirviController extends Controller
                     "pay_principal"=>$request->principal_val,
                     "pay_date"=>date("Y-m-d",strtotime('now')),
                     "operation"=>'GG',
-                    "remark"=>"Amount Released !",
+                    "remark"=>$remark,
                     "txn_status"=>'0',
-                    "amnt_holder"=>($request->medium=='on')?'B':'S',
+                    "amnt_holder"=>($request->medium=='on' || $request->medium=='mix')?'B':'S', // Assume partial bank involved
                     "shop_id"=>$shop_id,
                     "branch_id"=>$branch_id,
                 ];
@@ -923,5 +934,167 @@ class GirviController extends Controller
         $grivi_customers = GirvyCustomer::where($cond)->get();
         $data['record'] = $grivi_customers; 
         return response()->json(['data'=>$data]);
+    }
+
+    private function processReturn(Request $request) {
+        $shop_id = auth()->user()->shop_id;
+        $branch_id = auth()->user()->branch_id;
+        $custo_id = $request->custo; // From hidden field
+        
+        // Find Girvi Customer (Fallback if girvi_custo_id not sent directly)
+        $girvi_data = GirvyCustomer::find($custo_id);
+        
+        if(!$girvi_data) return response()->json(['error' => 'Customer not found!']);
+
+        DB::beginTransaction();
+        try {
+            $items_processed = 0;
+            $items_returned = 0;
+
+            if($request->has('return_items') && is_array($request->return_items)) {
+                
+                // Prepare Remark Suffix for Split Payment
+                $split_remark = "";
+                if($request->return_medium == 'mix') {
+                    $c = $request->ret_split_cash ?? 0;
+                    $o = $request->ret_split_online ?? 0;
+                    $split_remark = " [Split Pay: Cash $c, Online $o]";
+                }
+
+                foreach($request->return_items as $item_data) {
+                    $item_id = $item_data['id'] ?? null;
+                    $action = $item_data['action'] ?? null;
+                    
+                    if(!$item_id || !$action) continue;
+
+                    $item = GirvyItem::find($item_id);
+
+                    if(!$item) continue;
+                    if($item->status == '0') continue; // Already returned
+
+                    $p = ($item->flip) ? $item->activeflip->post_p : $item->principal;
+                    $i = ($item->flip) ? $item->activeflip->post_i : $item->interest;
+                    
+                    if($action === 'release') {
+                        // FULL RELEASE
+                        $txn_arr = [
+                            "girvi_custo_id" => $girvi_data->id,
+                            "girvi_batch_id" => $item->girvi_batch_id,
+                            "pay_mode" => ($request->return_medium == 'on') ? 'on' : 'off',
+                            "pay_medium" => $request->return_medium,
+                            "pay_principal" => $p,
+                            "pay_interest" => $i, 
+                            "pay_date" => date('Y-m-d'),
+                            "operation" => 'GR', // Girvi Return
+                            "amnt_holder" => ($request->return_medium == 'on' || $request->return_medium == 'mix') ? 'B' : 'S',
+                            "remark" => 'Item Released' . $split_remark,
+                            "shop_id" => $shop_id,
+                            "branch_id" => $branch_id
+                        ];
+                        GirvyTxn::create($txn_arr);
+                        
+                        $item->update(['status' => '0', 'remark' => 'Released']);
+                        if($item->flip) {
+                            $item->activeflip->update(['status' => '0']);
+                        }
+                        $items_returned++;
+
+                    } elseif($action === 'interest') {
+                        // PAY INTEREST ONLY
+                        $txn_arr = [
+                            "girvi_custo_id" => $girvi_data->id,
+                            "girvi_batch_id" => $item->girvi_batch_id,
+                            "pay_mode" => ($request->return_medium == 'on') ? 'on' : 'off',
+                            "pay_medium" => $request->return_medium,
+                            "pay_principal" => 0,
+                            "pay_interest" => $i,
+                            "pay_date" => date('Y-m-d'),
+                            "operation" => 'GI', // Girvi Interest
+                            "amnt_holder" => ($request->return_medium == 'on' || $request->return_medium == 'mix') ? 'B' : 'S',
+                            "remark" => 'Interest Only Paid' . $split_remark,
+                            "shop_id" => $shop_id,
+                            "branch_id" => $branch_id
+                        ];
+                        $txn = GirvyTxn::create($txn_arr);
+                        
+                        // Reset Interest logic
+                        $new_interest = 0; 
+                        
+                        $flip_arr = [
+                            "batch_id" => $item->girvi_batch_id,
+                            "item_id" => $item_id,
+                            "pre_p" => $p,
+                            "pre_i" => $i,
+                            "post_p" => $p, 
+                            "post_i" => $new_interest,
+                            "txn_id" => $txn->id,
+                            "op_on" => 'I',
+                            "remark" => 'Interest Paid'
+                        ];
+
+                        if($item->flip) $item->activeflip->update(['status' => '0']);
+                        GirviFlip::create($flip_arr);
+                        $item->update(['flip' => 1]);
+
+                    } elseif($action === 'part') {
+                        // PART PAYMENT (Total Input Amount)
+                        $total_paid = floatval($item_data['amount']);
+                        
+                        // Logic: Interest First, then Principal
+                        $paid_interest = min($total_paid, $i);
+                        $paid_principal = max(0, $total_paid - $i);
+                        $remaining_principal = $p - $paid_principal;
+
+                        $txn_arr = [
+                            "girvi_custo_id" => $girvi_data->id,
+                            "girvi_batch_id" => $item->girvi_batch_id,
+                            "pay_mode" => ($request->return_medium == 'on') ? 'on' : 'off',
+                            "pay_medium" => $request->return_medium,
+                            "pay_principal" => $paid_principal,
+                            "pay_interest" => $paid_interest,
+                            "pay_date" => date('Y-m-d'),
+                            "operation" => 'GP', // Girvi Part Pay
+                            "amnt_holder" => ($request->return_medium == 'on' || $request->return_medium == 'mix') ? 'B' : 'S',
+                            "remark" => 'Part Payment' . $split_remark,
+                            "shop_id" => $shop_id,
+                            "branch_id" => $branch_id
+                        ];
+                        $txn = GirvyTxn::create($txn_arr);
+                        
+                        // Interest cleared if fully paid, otherwise remains? 
+                        // Implementation Choice: New Interest starts at 0 for now.
+                        $new_interest = 0; 
+                        
+                        $flip_arr = [
+                            "batch_id" => $item->girvi_batch_id,
+                            "item_id" => $item_id,
+                            "pre_p" => $p,
+                            "pre_i" => $i,
+                            "post_p" => $remaining_principal,
+                            "post_i" => $new_interest, 
+                            "txn_id" => $txn->id,
+                            "op_on" => 'I',
+                            "remark" => 'Part Pay (Bal: '.$remaining_principal.')'
+                        ];
+
+                        if($item->flip) $item->activeflip->update(['status' => '0']);
+                        GirviFlip::create($flip_arr);
+                        $item->update(['flip' => 1]);
+                    }
+                    
+                    $items_processed++;
+                }
+            }
+
+            DB::commit();
+            return response()->json(['success' => "Processed $items_processed Items Successfully!"]);
+
+        } catch (\PDOException $e) {
+            DB::rollBack();
+            return response()->json(['error' => "Transaction Failed: " . $e->getMessage()]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => "Error: " . $e->getMessage()]);
+        }
     }
 }

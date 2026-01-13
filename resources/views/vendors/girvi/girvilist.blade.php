@@ -200,7 +200,6 @@ td >ul{
             success: function (data) {
                 $("#list_data_area").html(data.html);
                 $('#list_paging').html(data.paging);
-                //renderdatatable();
                 $("#CsTable").DataTable();
             },
             error: function (data) {
@@ -208,6 +207,7 @@ td >ul{
             },
         });
     }
+    
     getresult(url) ;
 
     $(document).on('click', '.pagination a', function (e) {

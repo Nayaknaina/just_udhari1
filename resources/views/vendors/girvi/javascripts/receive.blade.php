@@ -20,7 +20,7 @@
             }
         });
         
-        $(document).on('change',".category",function(){
+        /*$(document).on('change',".category",function(){
             var val = $(this).find('option:selected').text()??false;
             var ind = $('.category').index($(this));
             var block = $('.item_row').eq(ind).find('.jewellery');
@@ -42,7 +42,7 @@
             $(document).find('.image').eq(ind).val('');
             $(document).find('.rate').eq(ind).val('');
             $(document).find('.value').eq(ind).val('');
-        });
+        });*/
 
         $(document).on('click','#more_item',function(){
             var new_item = $("#main_item_row").clone();

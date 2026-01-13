@@ -34,37 +34,112 @@
     });
 
 
-    function getcustomer(input){
-        var keyword = $(input).val()??false;
-        $("#custo_ladger").attr('href','javascript:void(null);');
-        $('[name="custo"]').val("");
-        $('[name="type"]').val("");
-        $('[name="girvi"]').val("");
-        $("#data_area").html();
-        $.get('{{ route("girvi.custo") }}','mode=default&raw=true&keyword='+keyword,function(response){
-            var li  = '';
-            if(response.record){
-                var data = response.record;
-                if(data.length > 0){
-                    $(data).each(function(i,v){
-                        var name = v.name??"NA";
-                        var num = v.num??'NA';
-                        var mob = v.mobile??'NA';
-                        var id=v.id??0;
-                        var stream = name+" - "+mob;
-                        stream+= (v.girvi_id)?'( '+(v.girvi_id)+' )':'';
-                        li+=`<li><a href="{{ url('vendors/girvi/custo') }}/`+id+`" data-target="`+stream+`" class="select_customer" data-input="`+v.id+`~`+v.type+`">`+stream+`</a></li>`;
-                    });
-                    $("#customerlist").empty().append(li);
-                    $("#customerlist").addClass('active');
-                    positionmenu('#customerlist','#name');
-                }
-            }else{
-                $("#customerlist").removeClass('active');
-                $("#customerlist").empty();
-            }
-        });
+    // function getcustomer(input){
+    //     var keyword = $(input).val()??false;
+    //     $("#custo_ladger").attr('href','javascript:void(null);');
+    //     $('[name="custo"]').val("");
+    //     $('[name="type"]').val("");
+    //     $('[name="girvi"]').val("");
+    //     $("#data_area").html();
+    //     $.get('{{ route("girvi.custo") }}','mode=default&raw=true&keyword='+keyword,function(response){
+    //         var li  = '';
+    //         if(response.record){
+    //             var data = response.record;
+    //             if(data.length > 0){
+    //                 $(data).each(function(i,v){
+    //                     var name = v.name??"NA";
+    //                     var num = v.num??'NA';
+    //                     var mob = v.mobile??'NA';
+    //                     var id=v.id??0;
+    //                     var stream = name+" - "+mob;
+    //                     stream+= (v.girvi_id)?'( '+(v.girvi_id)+' )':'';
+    //                     li+=`<li><a href="{{ url('vendors/girvi/custo') }}/`+id+`" data-target="`+stream+`" class="select_customer" data-input="`+v.id+`~`+v.type+`">`+stream+`</a></li>`;
+    //                 });
+    //                 $("#customerlist").empty().append(li);
+    //                 $("#customerlist").addClass('active');
+    //                 positionmenu('#customerlist','#name');
+    //             }
+    //         }else{
+    //             $("#customerlist").removeClass('active');
+    //             $("#customerlist").empty();
+    //         }
+    //     });
+    // }
+   let customerXHR = null;
+
+function getcustomer(input) {
+    let keyword = $(input).val().trim();
+
+    
+    if (!keyword) {
+        $("#customerlist").removeClass('active').empty();
+        return;
     }
+
+    // abort previous request
+    if (customerXHR) customerXHR.abort();
+
+    $("#customerlist")
+        .html(`<li class="loading">Searching...</li>`)
+        .addClass('active');
+
+    positionmenu('#customerlist', '#name');
+
+    customerXHR = $.get(
+        '{{ route("girvi.custo") }}',
+        'mode=default&raw=true&keyword=' + encodeURIComponent(keyword),
+        function (response) {
+
+            let li = '';
+            let records = [];
+
+            // 🔥 normalize response (array OR object)
+            if (response.record) {
+                records = Array.isArray(response.record)
+                    ? response.record
+                    : Object.values(response.record);
+            }
+
+            // 🔥 process records safely
+            records.forEach(function (v) {
+
+                let name = (v.name && v.name.trim()) ? v.name : '';
+                let mob  = (v.mobile && v.mobile.trim()) ? v.mobile : '';
+
+                if (!name && !mob) return;
+
+                let stream = [];
+                if (name) stream.push(name);
+                if (mob) stream.push(mob);
+                if (v.girvi_id) stream.push(`(${v.girvi_id})`);
+
+                li += `
+                    <li>
+                        <a href="javascript:void(0)"
+                           class="select_customer"
+                           data-input="${v.id}~${v.type}"
+                           data-target="${stream.join(' - ')}">
+                           ${stream.join(' - ')}
+                        </a>
+                    </li>`;
+            });
+
+            // no record
+            if (!li) {
+                li = `<li class="no-record">No customer found</li>`;
+            }
+
+            $("#customerlist").html(li);
+        }
+    ).fail(function (xhr, status) {
+        if (status !== 'abort') {
+            $("#customerlist").html(
+                `<li class="no-record">Something went wrong</li>`
+            );
+        }
+    });
+}
+
 
     function positionmenu(container,input){
         const $menu = $(container);
@@ -189,6 +264,7 @@
             loadrecord();
             loadpayrecord(response.new,response.girvi);
             loadoptionsrecord(response.new,response.girvi);
+            $(document).trigger('customer_loaded', [response]);
         });
     });
 
@@ -472,7 +548,22 @@
         }
     });
 
-    $(document).on('input','.floatdigit',function(){
+    function floatdigit(ele,limit=false){
+        let val = $(ele).val()??ele.val();
+        if(!/^\d*\.?\d*$/.test(val)){
+            val = val.replace(/[^0-9.]/g, '');
+            let parts = val.split('.');
+            if (parts.length > 2) {
+                val = parts[0] + '.' + parts.slice(1).join('');
+            }
+        }
+        if(limit && val > limit){
+            
+        }else{
+            $(ele).val(val)??ele.val(val);
+        }
+    }
+    /*$(document).on('input','.floatdigit',function(){
         let val = $(this).val();
 
         // Allow only digits and one decimal point
@@ -491,8 +582,8 @@
         /*if (val && parseFloat(val) > maxValue) {
             // Simulate backspace: remove last character
             val = val.slice(0, -1);
-        }*/
+        }*
 
         $(this).val(val);
-    });
+    });*/
 </script>

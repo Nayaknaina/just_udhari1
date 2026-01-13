@@ -1,8 +1,6 @@
 @extends('layouts.vendors.app')
 
 @section('css')
-
-@include('layouts.theme.css.datatable')
 <link rel="stylesheet" href = "{{ asset('main/assets/css/figma-design.css')}}">
 <style>
     .dropdown.sub_drop_over {
@@ -36,7 +34,7 @@
 .info_ul > li >span{
     float:right;
 }
-#filter_block  #entries_block:after{
+ #filter_block  #entries_block:after{
     content:'Entries';
     position:absolute;
     top:0;
@@ -62,7 +60,7 @@ td >ul{
     text-align:center;
 }
 </style>
-<section class="content">   
+<section class="content">
     <div class="container-fluid">
         <div class="row">
             <!-- --------top search card ---- -->
@@ -97,7 +95,7 @@ td >ul{
                                         <option value="">Select Customer</option>
                                     </select>
                                 </div>-->
-                                <div class="col-md-3 p-0 mb-1">
+                                <div class="col-md-5 p-0 mb-1">
                                     <input type="text" class="form-control btn-roundhalf border-dark h-32px" id="keyword" value="" placeholder="Enter Keyword" oninput="changeEntries()">
                                 </div>
                                 <div class="col-md-3 p-0 mb-1">
@@ -110,28 +108,14 @@ td >ul{
                                         <input type="hidden" class="form-control" id="reportrange" value="" readonly="" onchange="changeEntries()" oninput="changeEntries()">
                                     </div>
                                 </div>
-                                <div class="col-md-1 p-0">
-                                    <select name="mode" class="form-control btn-roundhalf h-32px border-dark" id="mode" oninput="changeEntries()">
-                                        <option value="">Mode ?</option>
-                                        <option value="on" >Online</option>
-                                        <option value="off" >Cash</option>
-                                    </select>
-                                </div>
                                 <div class="col-md-2 p-0">
-                                    <select name="operation" class="form-control btn-roundhalf h-32px border-dark" id="operation" oninput="changeEntries()">
-                                        <option value="">Operation ?</option>
-                                        <option value="GG" >Girvi Grant</option>
-                                        <option value="GI" >Girvi Interest</option>
+                                    <select name="status" class="form-control btn-roundhalf h-32px border-dark" id="status" oninput="changeEntries()">
+                                        <option value="">Status ?</option>
+                                        <option value="1" class="text-danger">Paid</option>
+                                        <option value="0" class="text-success">Unpaid</option>
                                     </select>
                                 </div>
-                                <div class="col-md-1 p-0">
-                                    <select name="status" class="form-control btn-roundhalf h-32px border-dark" id="holder" oninput="changeEntries()">
-                                        <option value="">Holder ?</option>
-                                        <option value="B">Bank</option>
-                                        <option value="S" >Shop</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2 col-12 text-center mb-2" >
+                                <div class="col-md-2 col-12 mb-2" >
                                     <div class="row"  id="filter_block">
                                         <div class="form-group col-6 p-0 m-0"  id="entries_block">
                                             <select name="entries" class="form-control btn-roundhalf h-32px border-dark" oninput="changeEntries()" id="entries">
@@ -141,15 +125,7 @@ td >ul{
                                             </select>
                                         </div>
                                         <div class="col-6 p-0">
-                                            <div class="dropdown">
-                                                <button class="btn  btn btn-sm btn-primary dropdown-toggle h-32px btn-roundhalf border-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Export <i class="fa fa-caret-down"></i>
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#">PDF</a>
-                                                    <a class="dropdown-item" href="#">CSV</a>
-                                                </div>
-                                            </div>
+                                            <a href="#" class="form-control btn btn-sm btn-primary h-32px btn-roundhalf border-dark" style="align-content:center;">Export PDF</a>
                                         </div>
                                     </div>
                                 </div>
@@ -158,25 +134,28 @@ td >ul{
                                 <div class="col-12 p-0">
                                     <div class="table-responsive ">
                                         <!--<table class="custom-table  bg-header-primary">-->
-                                        <table id="CsTable" class="table table_theme">
+                                        <table id="CsTable" class="table table_theme ">
                                             <thead>
                                                 <tr>
                                                     <th>SN</th>
-                                                    <th>ENTRY</th>
-                                                    <th>Principal</th>
-                                                    <th>Interest</th>
-                                                    <th>Mode</th>
-                                                    <th>Operation</th>
-                                                    <th>Holder</th>
-                                                    <th>PAY</th>
+                                                    <th>ITEM</th>
+                                                    <th>Weight</th>
+                                                    <th>Purity</th>
+                                                    <th>Loan Amount</th>
+                                                    <th>Interest % </th>
+                                                    <th>Received Date </th>
+                                                    <th>Return Date</th>
+                                                    <th>Payment Status </th>
+                                                    <th>Reminder </th>
+                                                    <th>Action </th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="txn_data_area">
+                                            <tbody id="ladger_data_area">
 
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div id="txn_paging" class="col-12">
+                                    <div class="ladger_paging">
                                     </div>
                                 </div>
                             </div>
@@ -195,34 +174,28 @@ td >ul{
 
 @section('javascript')
 
-@include('layouts.theme.js.datatable')
+     @include('layouts.theme.js.datatable')
 @include('layouts.vendors.js.passwork-popup')
 <script>
-    
     function getresult(url) {
         $("#loader").show();
-        const loading_tr = '<tr><td colspan="8" class="text-center"><span class="p-1" style="background:lightgray;"><li class="fa fa-spinner fa-spin"></li> Loading Content..</span></td></tr>';
-        $("#txn_data_area").html(loading_tr)
-        if ($.fn.DataTable.isDataTable('#CsTable')) {
-            $('#CsTable').DataTable().destroy();
-        }
+        const loading_tr = '<tr><td colspan="11" class="text-center"><span class="p-1" style="background:lightgray;"><li class="fa fa-spinner fa-spin"></li> Loading Content..</span></td></tr>';
+        $("#ladger_data_area").html(loading_tr)
+        
         $.ajax({
             url: url , // Updated route URL
             type: "GET",
             data: {
                 "entries": $("#entries").val(),
                 "keyword": $("#keyword").val()??false,
-                'mode':$("#mode").val()??false,
+                'status':$("#status").val()??false,
                 "date": $("#reportrange").val()??false,
-                "operation": $("#operation").val()??false,
-                "holder": $("#holder").val()??false,
             },
             success: function (data) {
                 $("#loader").hide();
-                //$('#CsTable').DataTable().destroy();
-                $("#txn_data_area").html(data.html);
-                $('#CsTable').DataTable();
-                $("#txn_paging").html(data.paging);
+                $("#ladger_data_area").html(data.html);
+                $("#ladger_paging").html(data.paging);
+                //$("#pagination-result").html(data.html);
             },
             error: function (data) {
                 $("#loader").hide();

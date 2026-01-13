@@ -1,8 +1,6 @@
 @extends('layouts.vendors.app')
 
 @section('css')
-
-@include('layouts.theme.css.datatable')
 <link rel="stylesheet" href = "{{ asset('main/assets/css/figma-design.css')}}">
 <style>
     .dropdown.sub_drop_over {
@@ -25,66 +23,105 @@
 @php $data = new_component_array('breadcrumb',"Girvi Ledger") @endphp
 <x-new-bread-crumb :data=$data />
 <style>
-.info_ul{
-    list-style:none;
-    display: flex;
-}
-.info_ul > li{
-    margin:auto;
-    width:auto;
-}
-.info_ul > li >span{
-    float:right;
-}
-#filter_block  #entries_block:after{
-    content:'Entries';
-    position:absolute;
-    top:0;
-    bottom:0;
-    right:5px;
-    font-weight:bold;
-    align-content: center;
-}
-#filter_block  #entries_block select {
-    appearance: none; /* Removes default arrow in modern browsers */
-    -webkit-appearance: none; /* For Safari/Chrome */
-    -moz-appearance: none; /* For Firefox */
-    background: none; /* Optional: remove background if needed */
-    line-height: initial;
-}
-.select2.select2-container{
-    width:100%!important;
-}
-td >ul{
-    padding:0;
-    margin:0;
-    list-style:none;
-    text-align:center;
-}
+    .item_info > ul{
+        list-style:none;
+        /*font-size:80%;*/
+    }
+    .item_info > ul >li{
+        overflow: auto;
+    }
+    .item_info > ul >li>span{
+        float:right;
+    }
+    #girvi_num{
+        text-align: center;
+        border:1px dashed #f7c0a5 ;
+        border-top:2px solid #f7c0a5 ;
+        border-radius:15px;
+        margin-bottom: 5px;;
+    }
 </style>
-<section class="content">   
+@php 
+    //dd($item->customer)
+@endphp
+<section class="content">
+    {{ $girvi }}
     <div class="container-fluid">
         <div class="row">
             <!-- --------top search card ---- -->
-            <div class="col-md-12 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card round curve">
                     <div class="card-body pb-0 pt-2">
-                        <div class="row">
-                            <ul class="col-md-7 info_ul p-0">
-                                <li><b>NAME : </b><span id="sel_custo_name">  {{ @$girvicustomer->custo_name??'--' }}</span></li>
-                                <li><b>MOBILE : </b><span id="sel_custo_mobile">  {{ @$girvicustomer->custo_mobile??'--' }}</span></li>
-                                @php $custo_arr = ['c'=>'CUSTOMER','S'=>'SUPPLIER']; @endphp
-                                <li><b>TYPE : </b><span id="sel_custo_type">  {{ @$custo_arr[$girvicustomer->custo_type]??"NA" }}</span></li>
+                        <div class="row item_info">
+                            <ul class="p-1 col-12">
+                                <li><b>NAME</b><span>{{ $item->customer->custo_name }}</span></li>
+                                <li><b>MOBILE</b><span>{{ $item->customer->custo_mobile }}</span></li>
                             </ul>
-                            <ul class="col-md-5 info_ul p-0">
-                                <li><b>PRINCIPAL : </b><span id="sel_custo_principle" class="text-{{ (@$girvicustomer->balance_principal<0)?'danger':'success' }}">  {{ $girvicustomer->balance_principal??'--' }} ₹</span></li>
-                                <li><b>INTEREST : </b><span id="sel_custo_interest" class="text-{{ (@$girvicustomer->balance_interest<0)?'danger':'success' }}">  {{ $girvicustomer->balance_interest??'--' }} ₹</span></li>
+                            <hr class="col-12 m-0 p-1">
+                            <ul class="p-1 col-12 text-center">
+                                <li id="girvi_num">
+                                    GRV_I-{{ $item->receipt }}
+                                </li>
+                                <li>
+                                    <img src="{{ asset($item->image) }}" class="img-responsive img-thumbnail">
+                                </li>
+                            </ul>
+                            <ul class="p-1 col-12 m-0">
+                                <li><b>ITEM</b><span>{{ $item->detail }}</span></li>
+                                <li><b>TYPE</b><span>{{ $item->category }}</span></li>
+                            </ul>
+                            @if(in_array(strtolower($item->category),['gold','silver']))
+                                @php 
+                                    $item_prop = json_decode($item->property,true);
+                                @endphp
+                            <hr class="col-12 m-0 p-1">
+                            <ul class="p-1 col-12 m-0">
+                                <li><b>GROSS</b><span>{{ @$item_prop['gross']??'--' }} Gm.</span></li>
+                                <li><b>NET</b><span>{{ @$item_prop['net']??'--' }} Gm.</span></li>
+                                <li><b>PURE</b><span>{{ @$item_prop['pure']??'--' }} %</span></li>
+                                <li><b>FINE</b><span>{{ @$item_prop['fine']??'--' }} Gm</span></li>
+                            </ul>
+                            @endif
+                            <hr class="col-12 m-0 p-1">
+                            <ul class="p-1 col-12 m-0">
+                                <li><b>INTEREST</b><span>{{ $item->interest_type }}</span></li>
+                                <li><b>RATE %</b><span>{{ $item->interest_rate }} %</span></li>
+                                <li><hr class="m-0 p-0"></li>
+                                <li><b>RATE</b><span>{{ $item->rate }} Rs.</span></li>
+                                <li><b>VALUE</b><span>{{ $item->value }} Rs.</span></li>
+                                @if($item->flip)
+                                <li>
+                                    <b>PRINCIPAL</b>
+                                    <span>
+                                        {{ $item->activeflip->post_p }} Rs.
+                                        <hr class="m-0 p-0">
+                                        <small class="text-danger"><strike>{{ $item->principal }} Rs.</strike></small>
+                                    </span>
+                                </li>
+                                <li>
+                                    <b>INTEREST</b>
+                                    <span>
+                                        {{ $item->activeflip->post_i }} Rs.
+                                        <hr class="m-0 p-0">
+                                        <small class="text-danger"><strike>{{ $item->interest }} Rs.</strike></small>
+                                    </span>
+                                </li>
+                                @else 
+                                <li>
+                                    <b>PRINCIPAL</b>
+                                    <span></span>
+                                </li>
+                                <li>
+                                    <b>INTEREST</b>
+                                    <span></span>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-9">
                 <div class="card round curve">
                     <div class="card-body pt-1">
                         <div class="mb-4">
@@ -97,7 +134,7 @@ td >ul{
                                         <option value="">Select Customer</option>
                                     </select>
                                 </div>-->
-                                <div class="col-md-3 p-0 mb-1">
+                                <div class="col-md-5 p-0 mb-1">
                                     <input type="text" class="form-control btn-roundhalf border-dark h-32px" id="keyword" value="" placeholder="Enter Keyword" oninput="changeEntries()">
                                 </div>
                                 <div class="col-md-3 p-0 mb-1">
@@ -110,28 +147,14 @@ td >ul{
                                         <input type="hidden" class="form-control" id="reportrange" value="" readonly="" onchange="changeEntries()" oninput="changeEntries()">
                                     </div>
                                 </div>
-                                <div class="col-md-1 p-0">
-                                    <select name="mode" class="form-control btn-roundhalf h-32px border-dark" id="mode" oninput="changeEntries()">
-                                        <option value="">Mode ?</option>
-                                        <option value="on" >Online</option>
-                                        <option value="off" >Cash</option>
-                                    </select>
-                                </div>
                                 <div class="col-md-2 p-0">
-                                    <select name="operation" class="form-control btn-roundhalf h-32px border-dark" id="operation" oninput="changeEntries()">
-                                        <option value="">Operation ?</option>
-                                        <option value="GG" >Girvi Grant</option>
-                                        <option value="GI" >Girvi Interest</option>
+                                    <select name="status" class="form-control btn-roundhalf h-32px border-dark" id="status" oninput="changeEntries()">
+                                        <option value="">Status ?</option>
+                                        <option value="1" class="text-danger">Paid</option>
+                                        <option value="0" class="text-success">Unpaid</option>
                                     </select>
                                 </div>
-                                <div class="col-md-1 p-0">
-                                    <select name="status" class="form-control btn-roundhalf h-32px border-dark" id="holder" oninput="changeEntries()">
-                                        <option value="">Holder ?</option>
-                                        <option value="B">Bank</option>
-                                        <option value="S" >Shop</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2 col-12 text-center mb-2" >
+                                <div class="col-md-2 col-12 mb-2" >
                                     <div class="row"  id="filter_block">
                                         <div class="form-group col-6 p-0 m-0"  id="entries_block">
                                             <select name="entries" class="form-control btn-roundhalf h-32px border-dark" oninput="changeEntries()" id="entries">
@@ -141,15 +164,7 @@ td >ul{
                                             </select>
                                         </div>
                                         <div class="col-6 p-0">
-                                            <div class="dropdown">
-                                                <button class="btn  btn btn-sm btn-primary dropdown-toggle h-32px btn-roundhalf border-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Export <i class="fa fa-caret-down"></i>
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#">PDF</a>
-                                                    <a class="dropdown-item" href="#">CSV</a>
-                                                </div>
-                                            </div>
+                                            <a href="#" class="form-control btn btn-sm btn-primary h-32px btn-roundhalf border-dark" style="align-content:center;">Export PDF</a>
                                         </div>
                                     </div>
                                 </div>
@@ -158,17 +173,20 @@ td >ul{
                                 <div class="col-12 p-0">
                                     <div class="table-responsive ">
                                         <!--<table class="custom-table  bg-header-primary">-->
-                                        <table id="CsTable" class="table table_theme">
+                                        <table id="CsTable" class="table table_theme ">
                                             <thead>
                                                 <tr>
                                                     <th>SN</th>
-                                                    <th>ENTRY</th>
-                                                    <th>Principal</th>
-                                                    <th>Interest</th>
-                                                    <th>Mode</th>
-                                                    <th>Operation</th>
-                                                    <th>Holder</th>
-                                                    <th>PAY</th>
+                                                    <th>ITEM</th>
+                                                    <th>Weight</th>
+                                                    <th>Purity</th>
+                                                    <th>Loan Amount</th>
+                                                    <th>Interest % </th>
+                                                    <th>Received Date </th>
+                                                    <th>Return Date</th>
+                                                    <th>Payment Status </th>
+                                                    <th>Reminder </th>
+                                                    <th>Action </th>
                                                 </tr>
                                             </thead>
                                             <tbody id="txn_data_area">
@@ -176,7 +194,7 @@ td >ul{
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div id="txn_paging" class="col-12">
+                                    <div class="txn_paging">
                                     </div>
                                 </div>
                             </div>
@@ -195,34 +213,28 @@ td >ul{
 
 @section('javascript')
 
-@include('layouts.theme.js.datatable')
+     @include('layouts.theme.js.datatable')
 @include('layouts.vendors.js.passwork-popup')
 <script>
-    
     function getresult(url) {
         $("#loader").show();
-        const loading_tr = '<tr><td colspan="8" class="text-center"><span class="p-1" style="background:lightgray;"><li class="fa fa-spinner fa-spin"></li> Loading Content..</span></td></tr>';
-        $("#txn_data_area").html(loading_tr)
-        if ($.fn.DataTable.isDataTable('#CsTable')) {
-            $('#CsTable').DataTable().destroy();
-        }
+        const loading_tr = '<tr><td colspan="11" class="text-center"><span class="p-1" style="background:lightgray;"><li class="fa fa-spinner fa-spin"></li> Loading Content..</span></td></tr>';
+        $("#ladger_data_area").html(loading_tr)
+        
         $.ajax({
             url: url , // Updated route URL
             type: "GET",
             data: {
                 "entries": $("#entries").val(),
                 "keyword": $("#keyword").val()??false,
-                'mode':$("#mode").val()??false,
+                'status':$("#status").val()??false,
                 "date": $("#reportrange").val()??false,
-                "operation": $("#operation").val()??false,
-                "holder": $("#holder").val()??false,
             },
             success: function (data) {
                 $("#loader").hide();
-                //$('#CsTable').DataTable().destroy();
                 $("#txn_data_area").html(data.html);
-                $('#CsTable').DataTable();
                 $("#txn_paging").html(data.paging);
+                //$("#pagination-result").html(data.html);
             },
             error: function (data) {
                 $("#loader").hide();

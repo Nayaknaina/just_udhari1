@@ -20,6 +20,8 @@
 
 @section('content')
 
+@php $data = new_component_array('breadcrumb',"Girvi Ledger") @endphp
+<x-new-bread-crumb :data=$data />
 <style>
 .info_ul{
     list-style:none;
@@ -58,12 +60,8 @@ td >ul{
     text-align:center;
 }
 </style>
-@php 
-$anchor = ['<a href="'.route('girvi.create').'" class="btn btn-sm btn-outline-primary"><i class="fa fa-plus"></i> New</a>','<a href="#" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list"></i> List</a>'];
-$data = new_component_array('newbreadcrumb',"Girvi Ladger") 
-@endphp 
-<x-new-bread-crumb :data=$data :anchor=$anchor/> 
 <section class="content">
+    
     <div class="container-fluid">
         <div class="row">
             <!-- --------top search card ---- -->
@@ -108,7 +106,7 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
                                         <option value="0" class="text-success">Unpaid</option>
                                     </select>
                                 </div>-->
-                                <div class="col-md-2 col-12 offset-md-5 mb-2">
+                                <div class="col-md-2 col-12 offset-md-5 mb-2 text-center">
                                     <div class="row"  id="filter_block">
                                         <div class="form-group col-6 p-0 m-0"  id="entries_block">
                                             <select name="entries" class="form-control btn-roundhalf h-32px border-dark" oninput="changeEntries()" id="entries">
@@ -117,8 +115,16 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
                                                 <option value="100">100</option>
                                             </select>
                                         </div>
-                                        <div class="p-0  col-6">
-                                            <a href="#" class="form-control btn btn-sm btn-primary h-32px btn-roundhalf border-dark" style="align-content:center;">Export PDF</a>
+                                        <div class="col-6 p-0">
+                                            <div class="dropdown">
+                                                <button class="btn  btn btn-sm btn-primary dropdown-toggle h-32px btn-roundhalf border-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Export <i class="fa fa-caret-down"></i>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="#">PDF</a>
+                                                    <a class="dropdown-item" href="#">CSV</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -127,14 +133,8 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
                                 <div class="col-12 p-0">
                                     <div class="table-responsive ">
                                         <!--<table class="custom-table  bg-header-primary">-->
-                                        <table id="CsTable" class="table table_theme">
+                                        <table id="CsTable" class="table table_theme ">
                                             <thead>
-                                                <tr >
-                                                    <th colspan="3" >INFO SECTION</th>
-                                                    <th colspan="3">GIRVI</th>
-                                                    <th colspan="2">PAID</th>
-                                                    <th colspan="3">BALANCE</th>
-                                                </tr>
                                                 <tr>
                                                     <th>SN</th>
                                                     <th>Customer</th>
@@ -146,7 +146,7 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
                                                     <th>INTEREST</th>
                                                     <th>PRINCIPAL</th>
                                                     <th>INTEREST</th>
-                                                    <th><i class="fa fa-eye"></i></th>
+                                                    <th>TXN</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="ladger_data_area">
@@ -154,7 +154,8 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div id="ladger_paging" class='col-12'>
+                                    
+                                    <div id="ladger_paging" class="col-12">
                                     </div>
                                 </div>
                             </div>
@@ -173,14 +174,14 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
 
 @section('javascript')
 
-@include('layouts.theme.js.datatable')
+     @include('layouts.theme.js.datatable')
 @include('layouts.vendors.js.passwork-popup')
 <script>
     function getresult(url) {
         $("#loader").show();
         const loading_tr = '<tr><td colspan="11" class="text-center"><span class="p-1" style="background:lightgray;"><li class="fa fa-spinner fa-spin"></li> Loading Content..</span></td></tr>';
-        $("#ladger_data_area").html(loading_tr)
-		if ($.fn.DataTable.isDataTable('#CsTable')) {
+        $("#ladger_data_area").html(loading_tr);
+        if ($.fn.DataTable.isDataTable('#CsTable')) {
             $('#CsTable').DataTable().destroy();
         }
         $.ajax({
@@ -193,8 +194,9 @@ $data = new_component_array('newbreadcrumb',"Girvi Ladger")
             },
             success: function (data) {
                 $("#loader").hide();
-                $("#ladger_data_area").html(data.html);
-				$('#CsTable').DataTable();
+                //$("#ladger_data_area").html(data.html);
+                $("#ladger_data_area").replaceWith(data.html);
+                $('#CsTable').DataTable();
                 $("#ladger_paging").html(data.paging);
                 //$("#pagination-result").html(data.html);
             },

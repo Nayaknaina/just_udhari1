@@ -1,4 +1,5 @@
 @if($ledger->count()>0)
+<tbody>
     @foreach($ledger as $key=>$led)
         <tr>
             <td>{{ $ledger->firstItem() +  $key }}</td>
@@ -35,11 +36,15 @@
             </td>
             <td>
                 <a href="{{ route('girvi.custotxns',$led->id) }}" class="btn btn-sm btn-outline-info">
-                    <i class="fa fa-eye"></i> Open
+                    <i class="fa fa-eye"></i>
                 </a>
             </td>
         </tr>
     @endforeach
+</tbody>
+<tfoot>
+    
+</tfoot>
 @else 
-<!--<tr><td colspan="11" class="text-center text-danger">No Girvi Items !</td></tr>-->
+<tr><td colspan="11" class="text-center text-danger">No Girvi Items !</td></tr>
 @endif

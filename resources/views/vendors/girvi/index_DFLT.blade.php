@@ -153,13 +153,12 @@
                                                 </div>
                                                 <div class="card-body tab-content p-1" id="myTabContent">
                                                     <div class="fade-in tab-panel" id="recieved-tab-pane" role="tabpanel" aria-labelledby="recieved-tab" tabindex="0" >
-                                                    <!-- {{--@include('vendors.girvi.girviformpart.receive')--}} -->
-                                                    @include('vendors.girvi.girviformpart.receive_new')
-                                                    {{-- @include('vendors.girvi.girviformpart.receive_OLD') --}}
+                                                    {{--@include('vendors.girvi.girviformpart.receive')--}}
+                                                    @include('vendors.girvi.girviformpart.receive_OLD')
                                                     </div>
                                                     <div class="fade-in tab-panel" id="interest-tab-pane" role="tabpanel" aria-labelledby="interest-tab" tabindex="0" style="display:none;">
                                                         @include('vendors.girvi.girviformpart.payment_OLD')
-                                                       <!-- {{--@include('vendors.girvi.girviformpart.payment')--}} -->
+                                                       {{--@include('vendors.girvi.girviformpart.payment')--}}
                                                     </div>
                                                     <div class="fade-in tab-panel" id="return-tab-pane" role="tabpanel" aria-labelledby="return-tab" tabindex="0" style="display:none;">
                                                         @include('vendors.girvi.girviformpart.return')
@@ -221,6 +220,6 @@
     @include('layouts.common.placeholdertolabel')
     @include('layouts.vendors.js.passwork-popup')
     @include('vendors.girvi.javascripts.common')
-    @include('vendors.girvi.javascripts.receive_new')
+    @include('vendors.girvi.javascripts.receive_OLD')
     @include('vendors.girvi.javascripts.payinterest')
 @endsection

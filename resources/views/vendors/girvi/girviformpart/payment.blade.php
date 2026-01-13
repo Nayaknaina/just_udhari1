@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="col-12 text-center mb-1 pt-2" style="border-top:1px dashed gray;">
-            <input type="text" name="int_remark" value="" class="form-control h-32px btn-roundhalf  floatdigit text-center" placeholder="Remark">
+            <input type="text" name="int_remark" value="" class="form-control h-32px btn-roundhalf text-center" placeholder="Remark">
         </div>
     </div>
     <div class="row col-12 p-0 m-auto">

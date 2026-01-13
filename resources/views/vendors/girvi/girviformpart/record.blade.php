@@ -1,20 +1,3 @@
-<style>
-.rec_num_label{
-    border: 1px solid #4d7aff;
-    padding: 0 6px;
-    line-height: normal;
-    border-radius: 50%;
-    cursor:pointer;
-}
-.rec_num_label.active{
-    /* border: 1px solid #4d7aff;
-    padding: 0 6px;
-    line-height: normal;
-    border-radius: 50%; */
-    background: #fec6b5;
-    color: blue;
-}
-</style>
 <div class="table-responsive-mobile">
     <table class="table table_theme">
         <thead>
