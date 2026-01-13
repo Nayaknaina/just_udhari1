@@ -21,7 +21,7 @@
                     <nav class="navbar navbar-expand-md navbar-light ">
                         <a class="navbar-brand" href="{{ url('/') }}">
                         <img src = "{{ asset('assets/images/logo/logo.png') }}" class="logo-one" alt="Logo">
-                        </a>
+                          </a>
                          <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
                             <ul class="navbar-nav m-auto">
                                 <li class="nav-item">

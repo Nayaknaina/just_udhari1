@@ -46,8 +46,8 @@
 
 <div class="banner-area">
     <div class="main-slider">
-        <img src="{{ asset('assets/images/bg/jwellybannerofficial.webp') }}" alt="" class="d-none d-lg-block">
-        <img src="{{ asset('assets/images/bg/jwellybannerofficial_mobile.webp') }}" alt="" class="d-block d-lg-none" style="width: 100%;object-fit: cover;">
+       <img src="{{ asset('assets/images/bg/jwellybannerofficial.webp') }}" alt="" class="d-none d-lg-block">
+<img src="{{ asset('assets/images/bg/jwellybannerofficial_mobile.webp') }}" alt="" class="d-block d-lg-none" style="width: 100%;object-fit: cover;">
         <div class="banner-btn">
             <a href="#" class="default-btn btn-bg-two border-radius-50"> Start Now - It`s Free </a>
             <a href="#" class="default-btn btn-bg-one border-radius-50 ml-20"> Schedule Demo <i class="bx bx-chevron-right"></i></a>

@@ -13,29 +13,29 @@
 
     <script>
 
-        function myFunction(elementId) {
+    function myFunction(elementId) {
 
-            var element = document.getElementById(elementId);
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
+        var element = document.getElementById(elementId);
+        if (element.style.display === "none") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
 
-            }
         }
+    }
 
 		function digitonly(event,num){
-            let inputValue = event.target.value;
+        let inputValue = event.target.value;
 
                 // Allow only digits using regex
                 inputValue = inputValue.replace(/[^0-9]/g, '');  // Remove anything that's not a digit
 
                 // Ensure that the input has exactly 10 digits
-                if (inputValue.length > num) {
+        if (inputValue.length > num) {
                     inputValue = inputValue.slice(0, 10);  // Trim to 10 digits
-                }
+        }
 
                 // Update the input field with the valid input
-                event.target.value = inputValue;
-        }
-    </script>
+        event.target.value = inputValue;
+    }
+</script>
