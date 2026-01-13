@@ -124,11 +124,11 @@
                                                                 <input type="radio"  name="operation" value="receive" checked style="display:none;"> Girvi Received
                                                             </label>
                                                         </li>
-                                                        <li class="p-0">
+                                                        {{-- <li class="p-0">
                                                             <label for="interest-tab" class="btn tab-btn w-100 m-0" data-target="#interest-tab" id="interest-tab">
                                                                 <input type="radio"   name="operation" value="interest" style="display:none;"> Pay Interest
                                                             </label>
-                                                        </li>
+                                                        </li> --}}
                                                         <li class="p-0">
                                                             <label for="return-tab" class="btn tab-btn w-100 m-0" data-target="#return-tab" id="return-tab" >
                                                                 <input type="radio" name="operation" value="return"  style="display:none;"> Girvi Return
@@ -223,9 +223,7 @@
                                                 </div>
                                                 <div class="card-body tab-content p-1" id="myTabContent">
                                                     <div class="fade-in tab-panel" id="recieved-tab-pane" role="tabpanel" aria-labelledby="recieved-tab" tabindex="0" >
-                                                    <!-- {{--@include('vendors.girvi.girviformpart.receive')--}} -->
                                                     @include('vendors.girvi.girviformpart.receive_new')
-                                                    {{-- @include('vendors.girvi.girviformpart.receive_OLD') --}}
                                                     </div>
                                                     <div class="fade-in tab-panel" id="interest-tab-pane" role="tabpanel" aria-labelledby="interest-tab" tabindex="0" style="display:none;">
                                                         @include('vendors.girvi.girviformpart.payment_OLD')
