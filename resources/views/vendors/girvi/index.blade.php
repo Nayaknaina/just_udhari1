@@ -135,20 +135,90 @@
                                                             </label>
                                                         </li>
                                                     </ul>
-                                                    <div class="form-group input-group p-0 mb-1">
+                                                    <div class="search-pill-container shadow-sm mb-2">
+                                                        <style>
+                                                            .search-pill-container {
+                                                                background: #fff;
+                                                                border-radius: 50px;
+                                                                padding: 4px;
+                                                                border: 1px solid #e0e0e0;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                transition: all 0.3s ease;
+                                                                position: relative; /* For dropdown positioning */
+                                                            }
+                                                            .search-pill-container:focus-within {
+                                                                box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                                                                border-color: #ff6e26;
+                                                            }
+                                                            .search-input-custom {
+                                                                border: none;
+                                                                background: transparent;
+                                                                flex-grow: 1;
+                                                                padding: 8px 15px;
+                                                                font-weight: 600;
+                                                                color: #333;
+                                                                font-size: 0.9rem;
+                                                            }
+                                                            .search-input-custom::placeholder {
+                                                                color: #aaa;
+                                                                font-weight: 500;
+                                                            }
+                                                            .search-input-custom:focus {
+                                                                outline: none;
+                                                                box-shadow: none;
+                                                            }
+                                                            .btn-circle-custom {
+                                                                width: 34px;
+                                                                height: 34px;
+                                                                border-radius: 50%;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: center;
+                                                                padding: 0;
+                                                                transition: transform 0.2s;
+                                                                border: none;
+                                                            }
+                                                            .btn-circle-custom:hover {
+                                                                transform: scale(1.1);
+                                                            }
+                                                            
+                                                            /* Custom Lite Scrollbar */
+                                                            #customerlist::-webkit-scrollbar {
+                                                                width: 5px;
+                                                            }
+                                                            #customerlist::-webkit-scrollbar-track {
+                                                                background: transparent; 
+                                                            }
+                                                            #customerlist::-webkit-scrollbar-thumb {
+                                                                background: #e0e0e0; 
+                                                                border-radius: 10px;
+                                                            }
+                                                            #customerlist::-webkit-scrollbar-thumb:hover {
+                                                                background: #bdbdbd; 
+                                                            }
+                                                            #customerlist {
+                                                                scrollbar-width: thin;
+                                                                scrollbar-color: #e0e0e0 transparent;
+                                                            }
+                                                        </style>
+                                                        
                                                         <input type="hidden" name="custo" value="" id="custo">
                                                         <input type="hidden" name="type" value="" id="type">
                                                         <input type="hidden" name="girvi" value="" id="girvi">
-                                                        <input type="text" name="name" id="name" class="form-control myselect placeholdertolabel h-32px" placeholder="Name/Mobile/Girvi-Id" oninput="getcustomer($(this))" style="border-radius: 15px 0 0 15px;">
-                                                        <div class="input-group-append">
-                                                            <button type="button" class="btn btn-primary form-control w-auto m-0 h-32px" data-toggle="modal" data-target="#custo_modal" style="line-height:normal;">
-                                                            <i class="fa fa-plus"></i>
-                                                            </button>
-                                                            <a href="javascript:void(null);" class="btn btn-outline-primary w-auto h-32px" style="line-height:normal;border-radius: 0 15px 15px 0;" id="custo_ladger">
+                                                        
+                                                        <input type="text" name="name" id="name" class="search-input-custom" placeholder="Search Name / Mobile / Girvi-ID..." oninput="getcustomer($(this))" autocomplete="off">
+                                                        
+                                                        <div class="d-flex align-items-center pr-1">
+                                                            <a href="javascript:void(null);" class="btn btn-light text-secondary btn-circle-custom mr-1 border" id="custo_ladger" title="Ledger" style="background: #f8f9fa;">
                                                                 <i class="fa fa-book"></i>
                                                             </a>
+                                                            <button type="button" class="btn btn-gradient-primary btn-circle-custom text-white shadow-sm" data-toggle="modal" data-target="#custo_modal" title="Add New Customer">
+                                                                <i class="fa fa-plus"></i>
+                                                            </button>
                                                         </div>
-                                                        <ul id="customerlist" class="w-auto"></ul>
+                                                        
+                                                        <ul id="customerlist" class="w-100" style="top: 100% !important; margin-top: 12px; left: 0; border-radius: 12px; overflow-y: auto; max-height: 220px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: none; z-index: 9999; background: #fff; padding: 0;"></ul>
                                                     </div>
                                                 </div>
                                                 <div class="card-body tab-content p-1" id="myTabContent">
