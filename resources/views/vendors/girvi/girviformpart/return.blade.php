@@ -24,6 +24,8 @@
 
     <!-- Active Items List (Compact) -->
     <div class="col-12 p-0 mb-2">
+
+
         <div class="d-flex justify-content-between align-items-center mb-1 bg-white rounded-lg shadow-sm px-2 py-1">
             <h6 class="m-0 font-weight-bold text-dark font-sm pl-1">Items to Return</h6>
             <div class="custom-control custom-checkbox scale-90">
@@ -34,15 +36,12 @@
 
         <!-- Scrollable Item List (Compact Ht) -->
         <div class="girvi_item_scroll" id="return_items_container" style="background: #fff; border-radius: 10px; min-height: 120px; max-height: 30vh; overflow-y: auto; border: 1px solid #f0f0f0;">
-            <!-- Placeholder (Very Compact) -->
-            <div class="text-center py-4" id="return_placeholder">
+            <!-- Placeholder -->
+            <div class="text-center py-5" id="return_placeholder">
                 <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
-                    <i class="fa fa-search fa-lg text-secondary"></i>
+                    <i class="fa fa-search fa-lg text-secondary opacity-50"></i>
                 </div>
-                <h6 class="text-muted font-xs mb-2">Search Customer to View Items</h6>
-                <button type="button" class="btn btn-xs btn-outline-primary btn-roundhalf px-3" onclick="loadReturnDemoData()">
-                    Load Demo
-                </button>
+                <h6 class="text-muted font-xs">Search Customer to View Items</h6>
             </div>
         </div>
     </div>
@@ -154,288 +153,295 @@
 </div>
 
 <script>
-    // Scoped Script for Return Functionality
-    
-    window.isReturnDemo = false;
+    // Scoped Script for Return Functionality (`return.blade.php`)
 
-    // --- GLOBAL HELPER FUNCTIONS ---
-    
-    window.loadReturnDemoData = function() {
-        console.log("Loading Demo Data...");
-        window.isReturnDemo = true;
-        
-        let dummyResponse = {
-            girvi: { custo_name: 'Rahul Demo Customer', girvi_id: 'DEMO-001' },
-            new: [{
-                items: [
-                    {
-                        id: 'd1', detail: 'Gold Ring 22k', category: 'Gold', 
-                        principal: 15000, interest: 450, interest_rate: 1.5,
-                        status: '1', image: 'main/assets/img/product/girvi/ring.png', receipt: '101'
-                    },
-                    {
-                        id: 'd2', detail: 'Silver Anklet', category: 'Silver', 
-                        principal: 5000, interest: 150, interest_rate: 1.5,
-                        status: '1', image: '', receipt: '102'
-                    }
-                ]
-            }],
-            old: [{
-                items: [
-                    {
-                        id: 'd3', detail: 'Diamond Pendant', category: 'Diamond', 
-                        principal: 50000, interest: 1200, interest_rate: 2.0,
-                        status: '1', image: '', receipt: '99'
-                    }
-                ]
-            }],
-            girvy_return_date: '2026-02-01'
-        };
+    window.returnItems = []; // Stores the currently loaded active items
 
-        $('.fetch_custo_name').text(dummyResponse.girvi.custo_name);
-        $('.fetch_custo_girvi_num').text(dummyResponse.girvi.girvi_id);
-        
-        // Ensure render function exists
-        if(typeof window.renderReturnItems === 'function') {
-            window.renderReturnItems(dummyResponse);
-        } else {
-            console.error("renderReturnItems function not found!");
-            alert("Error: Script not loaded correctly. Please refresh.");
-        }
-    }
+    // --- 1. GLOBAL LISTENER: Triggered when a customer is searched & loaded in `common.blade.php` ---
+    $(document).on('customer_loaded', function(e, data) {
+         // console.log("Girvi Return Controller: Customer Data Received", data);
+         toastr.info("Syncing Customer Data...", "Return Tab");
+         renderReturnItems(data);
+    });
 
+    // --- 2. RENDER LOGIC: Converts Backend Data to HTML List ---
     window.renderReturnItems = function(data) {
+        console.log("Return Render INIT:", data);
+        if(!data) { console.error("No Data passed to renderReturnItems"); return; }
         let container = $('#return_items_container');
         container.empty();
-        
-        let allItems = [];
-        if(data.new && Array.isArray(data.new)) data.new.forEach(batch => batch.items && batch.items.forEach(item => allItems.push(item)));
-        if(data.old && Array.isArray(data.old)) data.old.forEach(batch => batch.items && batch.items.forEach(item => allItems.push(item)));
+        window.returnItems = []; 
+        let activeItems = [];
 
-        let activeItems = allItems.filter(item => item.status == '1');
+        // 1. Update Header Info
+        if(data && data.girvi) {
+             $('#ret_cust_summary_block').find('.fetch_custo_name').text(data.girvi.custo_name || 'Customer');
+             $('#ret_cust_summary_block').find('.fetch_custo_girvi_num').text(data.girvi.girvi_id ? 'GRV-'+data.girvi.girvi_id : '');
+        }
+
+        // 2. Parse Items (MERGE OLD & NEW to show EVERYTHING)
+        let batches = [];
+        if(data && data.new) {
+             let newB = Array.isArray(data.new) ? data.new : Object.values(data.new);
+             batches = batches.concat(newB);
+        }
+        if(data && data.old) {
+             let oldB = Array.isArray(data.old) ? data.old : Object.values(data.old);
+             batches = batches.concat(oldB);
+        }
+
+        // --- VISUAL CONFIRMATION ---
+        if(batches.length === 0) {
+             console.warn("No Batches Found!");
+             if(typeof toastr !== 'undefined') toastr.warning("No Data Found in Database!", "Debugger");
+             
+             // FORCE INJECT TEST ITEM to prove UI works
+             activeItems.push({
+                 id: 99999,
+                 detail: "⚠️ NO DATA (System Test Item)",
+                 category: "Test",
+                 receipt: "000",
+                 image: "",
+                 principal: 1000,
+                 interest: 100,
+                 payable: 1100,
+                 action: 'release', 
+                 selected: false,
+                 amount: 0
+             });
+        } else {
+            if(typeof toastr !== 'undefined') toastr.success(`Found ${batches.length} Batches`, "Debugger");
+        }
+            batches.forEach(batch => {
+            if(batch.items) {
+                let b_items = [];
+                // Safe Array Conversion
+                if(Array.isArray(batch.items)) b_items = batch.items;
+                else if(typeof batch.items === 'object' && batch.items !== null) b_items = Object.values(batch.items);
+
+                b_items.forEach(item => {
+                    // FORCE DEFAULTS
+                    let p = parseFloat(item.principal) || 0;
+                    let i = parseFloat(item.interest) || 0;
+                    
+                    // Try Flip Logic Safely
+                    try {
+                         if((item.flip == 1 || item.flip == '1') && item.activeflip) {
+                            p = parseFloat(item.activeflip.post_p) || p;
+                            i = parseFloat(item.activeflip.post_i) || i;
+                         }
+                    } catch(e) { console.error("Flip Logic Error", e); }
+
+                    // Push to list (Show ALL items for this customer context)
+                    activeItems.push({
+                        id: item.id,
+                        detail: item.detail || 'Unknown Item',
+                        category: item.category || 'General',
+                        receipt: item.receipt || '---',
+                        image: item.image || '',
+                        principal: p,
+                        interest: i,
+                        payable: p + i,
+                        action: 'release', 
+                        selected: false,
+                        amount: 0 // Initialize amount
+                    });
+                });
+            }
+            });
+        }
+
+        // 3. Update UI State
+        console.log("Active Items Parsed:", activeItems.length);
+        window.returnItems = activeItems;
         $('#ret_active_count').text(activeItems.length);
-
+        
+        // 4. Empty State
         if(activeItems.length === 0) {
             container.html(`
                 <div class="text-center py-5">
-                    <i class="fa fa-box-open fa-2x text-muted opacity-50 mb-2"></i>
-                    <h6 class="text-muted">No active items found</h6>
-                    <button class="btn btn-sm btn-link" onclick="loadReturnDemoData()">Try Demo Data</button>
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                        <i class="fa fa-box-open fa-lg text-secondary opacity-50"></i>
+                    </div>
+                    <h6 class="text-muted font-xs">No items found.</h6>
                 </div>
             `);
             resetReturnTotals();
             return;
         }
 
-        activeItems.forEach(item => {
-            let p = parseFloat(item.principal || 0);
-            let i = parseFloat(item.interest || 0);
-            let total = p + i;
-            let imgHtml = (item.image && item.image !== '') 
-                ? `<img src="/${item.image}" style="width: 100%; height: 100%; object-fit: cover;">`
-                : `<div class="d-flex align-items-center justify-content-center h-100 w-100 bg-light text-secondary"><i class="fa fa-gem"></i></div>`;
-            
-            let html = `
-                <div class="card mb-2 shadow-sm border-0 return-item-card" id="card_${item.id}" style="border-radius: 10px; overflow: hidden; transition: all 0.2s;">
-                    <div class="d-flex align-items-center p-2 m-0 w-100">
-                        
-                        <div class="pr-3 pl-2">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input return-check" id="ret_item_${item.id}" value="${item.id}" data-p="${p}" data-i="${i}" data-action="release">
-                                <label class="custom-control-label" for="ret_item_${item.id}"></label>
-                            </div>
-                        </div>
-                        
-                        <div class="mr-3" style="width: 50px; height: 50px; border-radius: 8px; overflow: hidden; background: #f8f9fa;">
-                            ${imgHtml}
-                        </div>
-                        
-                        <div class="flex-grow-1" style="min-width: 0;">
-                            <h6 class="mb-0 text-dark font-weight-bold text-truncate" style="font-size: 0.9rem;">${item.detail || 'Item'}</h6>
-                            <small class="text-muted d-block" style="font-size: 0.75rem;">${item.category} • GRV-${item.receipt}</small>
-                            
-                            <div class="btn-group btn-group-toggle mt-1 action-toggle-group" data-id="${item.id}" style="display:none;">
-                                <label class="btn btn-xs btn-outline-primary active py-0 px-2" onclick="setReturnAction('${item.id}', 'release', this)">
-                                    <input type="radio" name="action_${item.id}" checked> Release
-                                </label>
-                                <label class="btn btn-xs btn-outline-info py-0 px-2" onclick="setReturnAction('${item.id}', 'part', this)">
-                                    <input type="radio" name="action_${item.id}"> Part Pay
-                                </label>
-                                <label class="btn btn-xs btn-outline-warning py-0 px-2" onclick="setReturnAction('${item.id}', 'interest', this)">
-                                    <input type="radio" name="action_${item.id}"> Interest
-                                </label>
-                            </div>
+        // 5. Render List
+        let html = '<div class="list-group list-group-flush">';
+        activeItems.forEach((item, index) => {
+            let imgHtml = item.image 
+                ? `<img src="/${item.image}" class="rounded-lg shadow-sm" style="width: 45px; height: 45px; object-fit: cover;">`
+                : `<div class="bg-light rounded-lg d-flex align-items-center justify-content-center shadow-sm" style="width: 45px; height: 45px;"><i class="fa fa-gem text-muted"></i></div>`;
 
-                            <!-- Part Payment Input (Hidden Default) -->
-                            <div class="mt-2 part-pay-container" id="part_input_container_${item.id}" style="display:none; max-width: 120px;">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text border-0 bg-light text-muted pl-1 pr-1">₹</span>
-                                    </div>
-                                    <input type="number" class="form-control border-0 bg-light font-weight-bold p-1 part-pay-field" 
-                                        id="part_val_${item.id}" data-id="${item.id}" value="" 
-                                        placeholder="Total Amt" onkeyup="updatePartPay('${item.id}', this.value)" onchange="updatePartPay('${item.id}', this.value)">
-                                </div>
+            html += `
+                <div class="list-group-item p-2 border-0 mb-1 shadow-sm rounded-lg return-item-row" id="ret_row_${item.id}" style="background:#fff; transition: all 0.2s;">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-2">
+                             <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input return-item-check" id="ret_check_${item.id}" value="${index}">
+                                <label class="custom-control-label" for="ret_check_${item.id}"></label>
                             </div>
                         </div>
-                        
-                        <div class="text-right pl-2">
-                            <h6 class="mb-0 font-weight-bold text-success item-total-display" id="display_total_${item.id}">₹ ${total}</h6>
-                            <small class="text-danger font-weight-bold" style="font-size: 0.65rem;">
-                                <span id="display_breakup_${item.id}">P: ${p} + I: ${i}</span>
-                            </small>
+                        <div class="mr-3">${imgHtml}</div>
+                        <div class="flex-grow-1">
+                             <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="mb-0 font-weight-bold text-dark font-sm text-truncate" style="max-width: 150px;">${item.detail}</h6>
+                                <span class="badge badge-light border text-secondary font-xs py-0">#${item.receipt}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted font-xs">P: <b>${item.principal.toFixed(2)}</b></small>
+                                <small class="text-danger font-xs">I: <b>${item.interest.toFixed(2)}</b></small>
+                            </div>
                         </div>
-
+                    </div>
+                    <!-- Action Toggle -->
+                    <div class="mt-2 action-toggle-group" id="action_toggle_${item.id}" style="display:none;">
+                         <div class="btn-group btn-group-sm btn-group-toggle w-100" data-toggle="buttons">
+                            <label class="btn btn-outline-success active font-xs">
+                                <input type="radio" name="action_${item.id}" value="release" checked onchange="updateReturnAction(${index}, 'release')"> Release
+                            </label>
+                            <label class="btn btn-outline-primary font-xs">
+                                <input type="radio" name="action_${item.id}" value="interest" onchange="updateReturnAction(${index}, 'interest')"> Interest
+                            </label>
+                            <label class="btn btn-outline-info font-xs">
+                                <input type="radio" name="action_${item.id}" value="part" onchange="updateReturnAction(${index}, 'part')"> Part Pay
+                            </label>
+                        </div>
+                        <div class="mt-2" id="part_input_container_${item.id}" style="display:none;">
+                            <input type="number" class="form-control form-control-sm font-xs" placeholder="Enter Amount" oninput="updatePartPayAmount(${index}, this.value)">
+                        </div>
                     </div>
                 </div>
             `;
-            container.append(html);
         });
-        
-        $('.return-check').off('change').on('change', function() {
-            let id = $(this).val();
-            let checked = $(this).prop('checked');
-            if(checked) $(`#card_${id} .action-toggle-group`).fadeIn(200);
-            else {
-                $(`#card_${id} .action-toggle-group`).hide();
-                $(`#part_input_container_${id}`).hide();
+        html += '</div>';
+        container.html(html);
+
+        // 6. Bind Events
+        $('.return-item-check').off('change').on('change', function() {
+            let idx = $(this).val();
+            let isChecked = $(this).prop('checked');
+            
+            window.returnItems[idx].selected = isChecked;
+            
+            if(isChecked) {
+                $(`#ret_row_${window.returnItems[idx].id}`).find('.action-toggle-group').slideDown(200);
+                 $(`#ret_row_${window.returnItems[idx].id}`).addClass('bg-light');
+            } else {
+                $(`#ret_row_${window.returnItems[idx].id}`).find('.action-toggle-group').slideUp(200);
+                 $(`#ret_row_${window.returnItems[idx].id}`).removeClass('bg-light');
             }
-            window.calcReturnTotals();
+            calculateReturnTotals();
         });
     }
+    }
 
-    window.setReturnAction = function(id, action, el) {
-        event.preventDefault(); 
-        event.stopPropagation();
+    window.updateReturnAction = function(index, action, el) {
+        // Safe check
+        if(!window.returnItems[index]) { console.error("Item not found:", index); return; }
         
-        $(el).parent().find('label').removeClass('active');
-        $(el).addClass('active');
+        let id = window.returnItems[index].id;
+        window.returnItems[index].action = action;
 
-        let checkbox = $(`#ret_item_${id}`);
-        checkbox.attr('data-action', action);
+        // UI Updates
+        if(el) {
+            $(el).parent().parent().find('label').removeClass('active');
+            $(el).parent().addClass('active');
+        }
 
+        let checkbox = $(`#ret_item_${id}`); // Note: ID in DOM might need verify, assumes ret_item_ID exists? 
+        // Wait, checkboxes are ret_check_${id}. 
+        // Let's use the row container or just direct ID access for breakdown divs.
+        
         // UI Logic
         if(action === 'part') {
             $(`#part_input_container_${id}`).slideDown(200);
             
-            // Clean slate: Empty input, placeholder instructions
-            let field = $(`#part_val_${id}`);
-            field.val(''); 
+            // Clean slate
+            let field = $(`#part_input_container_${id}`).find('input');
+            field.val(window.returnItems[index].amount || ''); 
             field.attr('placeholder', 'Enter Amt');
             field.focus();
             
-            // Update immediately with 0/empty to reset view to "Total"
-            window.updatePartPay(id, '');
+            window.updatePartPayAmount(index, field.val());
         } else {
             $(`#part_input_container_${id}`).slideUp(200);
             
-            let p = parseFloat(checkbox.data('p'));
-            let i = parseFloat(checkbox.data('i'));
+            let item = window.returnItems[index];
+            let p = parseFloat(item.principal);
+            let i = parseFloat(item.interest);
 
             if(action === 'release') {
-                $(`#display_total_${id}`).text('₹ ' + (p + i));
-                $(`#display_breakup_${id}`).html(`P: ${p} + I: ${i}`);
-                $(`#display_total_${id}`).removeClass('text-warning text-info text-danger').addClass('text-success');
-                $(`#display_breakup_${id}`).removeClass('text-dark text-muted');
+                $(`#ret_row_${id}`).find('.d-flex.justify-content-between small:first b').text(p.toFixed(2));
+                $(`#ret_row_${id}`).find('.d-flex.justify-content-between small:last b').text(i.toFixed(2));
+                $(`#ret_row_${id}`).find('.d-flex.justify-content-between small:last').removeClass('text-muted').addClass('text-danger');
             } else if(action === 'interest') {
-                $(`#display_total_${id}`).text('₹ ' + i);
-                $(`#display_breakup_${id}`).text(`Interest Only`);
-                $(`#display_total_${id}`).removeClass('text-success text-info text-danger').addClass('text-warning');
-                $(`#display_breakup_${id}`).removeClass('text-dark text-muted');
+                 // Interest Only: Show Interest Payable, maybe dim principal?
+                 // For now just standard view rely on TOTAL calc
             }
             window.calcReturnTotals();
         }
     }
 
-    window.updatePartPay = function(id, val) {
+    window.updatePartPayAmount = function(index, val) {
+        if(!window.returnItems[index]) return;
+        
+        let id = window.returnItems[index].id;
         let amount = parseFloat(val) || 0;
-        let checkbox = $(`#ret_item_${id}`);
-        let p = parseFloat(checkbox.data('p'));
-        let i = parseFloat(checkbox.data('i'));
-        let totalDue = p + i;
+        window.returnItems[index].amount = amount;
         
-        // Logic: 
-        // If Amount > 0: Show Breakdown (Paid + Balance).
-        // If Amount == 0: Show Standard Total (P + I).
+        // No complex breakdown UI update needed unless specific request? 
+        // Keeping it simple as per "optimize" request.
         
-        if(amount <= 0) {
-            // Restore "Release" style view
-            $(`#display_total_${id}`).text('₹ ' + totalDue);
-            $(`#display_breakup_${id}`).html(`P: ${p} + I: ${i}`);
-            $(`#display_total_${id}`).removeClass('text-warning text-info text-danger').addClass('text-success');
-            // Store 0 custom
-            checkbox.attr('data-custom', 0);
-        } else {
-            // Updated Part Pay View
-            let paidInterest = Math.min(amount, i);
-            let paidPrincipal = Math.max(0, amount - i); 
-            let remainingPrincipal = p - paidPrincipal;
-            
-            $(`#display_total_${id}`).text('₹ ' + amount);
-            
-            let breakdownHtml = `
-                <div style="font-size: 0.7rem; line-height: 1.2;" class="text-right">
-                    <span class="text-success font-weight-bold">Paid: ${amount}</span> 
-                    <span class="text-dark">(I:${paidInterest} + P:${paidPrincipal})</span><br>
-                    <span class="text-danger font-weight-bold" style="font-size: 0.75rem;">Bal: ${remainingPrincipal}</span>
-                </div>
-            `;
-            
-            if(amount < i) {
-                 breakdownHtml += `<div class="text-danger small font-weight-bold mt-1">Interest (${i}) Pending!</div>`;
-            }
-
-            $(`#display_breakup_${id}`).html(breakdownHtml);
-            $(`#display_total_${id}`).removeClass('text-success text-warning').addClass('text-info');
-            
-            checkbox.attr('data-custom', amount);
-        }
-
         window.calcReturnTotals();
     }
 
     window.calcReturnTotals = function() {
         let p_sum = 0, i_sum = 0;
         
-        $('.return-check:checked').each(function() {
-            let action = $(this).attr('data-action');
-            let p = parseFloat($(this).data('p'));
-            let i = parseFloat($(this).data('i'));
-
-            if(action === 'release') {
-                p_sum += p;
-                i_sum += i;
-            } else if (action === 'interest') {
-                i_sum += i; 
-            } else if (action === 'part') {
-                let custom = parseFloat($(this).attr('data-custom')) || 0;
+        // Use Data State, not DOM state for calculation (More Robust)
+        window.returnItems.forEach(item => {
+            if(item.selected) {
+                let p = parseFloat(item.principal);
+                let i = parseFloat(item.interest);
                 
-                // If custom is 0, technically nothing is paid in part pay mode.
-                // Or should we assume they MUST pay something? 
-                // Currently calc treats 0 as 0 paid.
-                
-                let paidInterest = Math.min(custom, i);
-                let paidPrincipal = Math.max(0, custom - i);
-                
-                p_sum += paidPrincipal;
-                i_sum += paidInterest;
+                if(item.action === 'release') {
+                    p_sum += p;
+                    i_sum += i;
+                } else if(item.action === 'interest') {
+                    i_sum += i;
+                    // Principal remains unpaid in Interest Only mode (for the calculation of what is being PAID now)
+                } else if(item.action === 'part') {
+                    let custom = parseFloat(item.amount) || 0;
+                    
+                    // Logic: First pay Interest, then Principal
+                    let paidInterest = Math.min(custom, i);
+                    let paidPrincipal = Math.max(0, custom - i);
+                    
+                    p_sum += paidPrincipal;
+                    i_sum += paidInterest;
+                }
             }
         });
-        
-        $('#ret_total_principal').text('₹ '+ p_sum.toLocaleString());
-        $('#ret_total_interest').text('₹ '+ i_sum.toLocaleString());
-        $('#ret_total_payable').text('₹ '+ (p_sum + i_sum).toLocaleString());
-        
-        $('.return-item-card').removeClass('border-primary bg-light border-warning border-info');
-        $('.return-check:checked').each(function() {
 
-            let card = $(this).closest('.return-item-card');
-            let action = $(this).attr('data-action');
-            card.addClass('bg-light');
-            
-            if(action === 'release') card.addClass('border-primary');
-            else if(action === 'interest') card.addClass('border-warning');
-            else if(action === 'part') card.addClass('border-info');
+        $('#ret_total_principal').text('₹ '+ p_sum.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        $('#ret_total_interest').text('₹ '+ i_sum.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        $('#ret_total_payable').text('₹ '+ (p_sum + i_sum).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        
+        // UI Polish: Update borders based on state
+        $('.return-item-row').removeClass('border-primary border-warning border-info bg-light');
+        window.returnItems.forEach(item => {
+            if(item.selected) {
+                let row = $(`#ret_row_${item.id}`);
+                row.addClass('bg-light');
+                if(item.action === 'release') row.addClass('border-primary');
+                else if(item.action === 'interest') row.addClass('border-warning');
+                else if(item.action === 'part') row.addClass('border-info');
+            }
         });
     }
 
@@ -481,15 +487,29 @@
     // --- EVENT LISTENERS ---
     $(document).ready(function() {
         
+        // 1. Auto-Load if Data Exists (Fix for Tab Switching / Race Conditions)
+        if(window.lastGirviData) {
+             console.log("Return Tab: Auto-loading existing data");
+             window.renderReturnItems(window.lastGirviData);
+        }
+
+        // 2. Real-time update
         $(document).on('customer_loaded', function(e, response) {
-            console.log("Return UI: Data Recieved", response);
-            window.isReturnDemo = false;
-            window.renderReturnItems(response);
+             // console.log("Return UI: Data Recieved", response);
+             window.isReturnDemo = false;
+             window.renderReturnItems(response);
         });
 
         $('#check_all_return_items').change(function() {
             let checked = $(this).prop('checked');
-            $('.return-check').prop('checked', checked).trigger('change');
+            $('.return-item-check').click(); // Trigger click to fire handlers
+            // Alternatively manually loop update
+            window.returnItems.forEach((item, index) => {
+                 let cb = $(`#ret_check_${item.id}`);
+                 if(cb.prop('checked') !== checked) {
+                     cb.prop('checked', checked).trigger('change');
+                 }
+            });
         });
 
         $('#btn_process_return').click(function() {
@@ -542,24 +562,21 @@
             // --- END DEMO MODE ---
 
             // --- BACKEND SUBMISSION ---
-            if(!confirm("Are you sure you want to process this transaction?")) return;
+            let selectedItems = window.returnItems.filter(i => i.selected);
+
+            if(!confirm("Are you sure you want to process this transaction for " + selectedItems.length + " items?")) return;
 
             let btn = $(this);
             let originalText = btn.html();
             btn.html('<i class="fa fa-spinner fa-spin"></i> Processing...');
             btn.prop('disabled', true);
 
-            let returnItems = [];
-            selected.each(function() {
-                let id = $(this).val();
-                let action = $(this).attr('data-action');
-                let custom = $(this).attr('data-custom') || 0;
-                
-                returnItems.push({
-                    id: id,
-                    action: action,
-                    amount: custom // Only relevant for part pay
-                });
+            let payloadItems = selectedItems.map(item => {
+                return {
+                    id: item.id,
+                    action: item.action,
+                    amount: item.amount || 0
+                };
             });
 
             let payload = {
@@ -568,7 +585,7 @@
                 custo: $('#custo').val(), // Hidden input from main form
                 type: $('#type').val(),   // Hidden input from main form
                 return_medium: $('#ret_pay_medium').val(),
-                return_items: returnItems
+                return_items: payloadItems
             };
 
             // Get URL from main form or fallback

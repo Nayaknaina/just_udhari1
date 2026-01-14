@@ -115,7 +115,7 @@ function getcustomer(input) {
 
                 li += `
                     <li>
-                        <a href="javascript:void(0)"
+                        <a href="{{ url('vendors/girvi/custo') }}/${v.id}"
                            class="select_customer"
                            data-input="${v.id}~${v.type}"
                            data-target="${stream.join(' - ')}">
@@ -180,6 +180,19 @@ function getcustomer(input) {
         var trgt_path = $(this).attr('href');
         $("#data_area").html(loading_tr);
         $.get($(this).attr('href'),"type="+custo_data[1],function(response){
+            // Store globally for other tabs (Return, etc.) to access late
+            window.lastGirviData = response;
+            
+            $(document).trigger('customer_loaded', [response]);
+            // Direct call to Return Tab Renderer to ensure visibility
+            if(typeof window.renderReturnItems === 'function') {
+                try {
+                    window.renderReturnItems(response);
+                } catch(err) {
+                    console.error("Return Render Error:", err);
+                }
+            }
+
             if(response.old){
                 if(response.old.length > 0){
                     var old_record = response.old;
@@ -229,17 +242,20 @@ function getcustomer(input) {
                         var items = bv.items;
                         if(items.length > 0){
                             $.each(items,function(ci,cv){
-                                let payable = (cv.interest * bv.girvy_period)+cv.issue;
+                                let cv_issue = parseFloat(cv.issue) || 0;
+                                let cv_interest = parseFloat(cv.interest) || 0;
+                                let bv_period = parseFloat(bv.girvy_period) || 0;
+                                let payable = (cv_interest * bv_period) + cv_issue;
                                new_girvi_tr +=`<tr class="border-bottom-0">
                                                     <td class="font-weight-bold text-center">`+(ci+1)+`</td>
-                                                    <td><span class="badge badge-pill badge-light border text-secondary px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">GRV-`+cv.receipt+`</span></td>
-                                                    <td class="font-weight-bold text-dark">`+cv.entry_date+`</td>
+                                                    <td><span class="badge badge-pill badge-light border text-secondary px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">GRV-`+(cv.receipt||'') +`</span></td>
+                                                    <td class="font-weight-bold text-dark">`+(cv.entry_date||'-')+`</td>
                                                     <td>
-                                                        <span class="d-block font-xs text-muted text-uppercase">`+cv.interest_type+`</span>
-                                                        <span class="font-weight-bold text-dark">`+cv.interest_rate+`%</span>
+                                                        <span class="d-block font-xs text-muted text-uppercase">`+(cv.interest_type||'Month')+`</span>
+                                                        <span class="font-weight-bold text-dark">`+(cv.interest_rate||0)+`%</span>
                                                     </td>
-                                                    <td class="font-weight-bold text-dark text-right pr-4">`+cv.issue+` ₹</td>
-                                                    <td class="text-danger font-weight-bold text-right pr-4">`+cv.interest+` ₹</td>
+                                                    <td class="font-weight-bold text-dark text-right pr-4">`+cv_issue+` ₹</td>
+                                                    <td class="text-danger font-weight-bold text-right pr-4">`+cv_interest+` ₹</td>
                                                     <td class="text-success font-weight-bold text-right pr-4" style="font-size: 0.95rem;">`+(payable)+` ₹</td>
                                                     <td class="text-muted small">`+bv.girvy_return_date+`</td>
                                                     <td class="text-center">
@@ -272,7 +288,6 @@ function getcustomer(input) {
             loadrecord();
             loadpayrecord(response.new,response.girvi);
             loadoptionsrecord(response.new,response.girvi);
-            $(document).trigger('customer_loaded', [response]);
         });
     });
 
@@ -355,7 +370,8 @@ function getcustomer(input) {
     
     function loadrecord(){
         $("#record_data_area").html(loading_tr);
-        let active_tab = $('.new_girvi_page_tab_switch.active').data('target');
+        //let active_tab = $('.new_girvi_page_tab_switch.active').data('target');
+        let active_tab = $('.record-tab-btn.active').data('target');
         let data = window[active_tab + '_tr']; 
         let principal = window[active_tab + '_principal'];
         let interest = window[active_tab + '_interest'];

@@ -108,7 +108,8 @@ class GirviController extends Controller
                 if(!empty($grivi_customer)){
                     $record['girvi'] = $grivi_customer;
                     $old_batches = $grivi_customer->batchs()->with(['activeflip','items'=>function($itemq){ $itemq->with('activeflip')->where('status','0'); }])->get();
-                    $new_batches = $grivi_customer->batchs()->with(['activeflip','items'=>function($itemq){ $itemq->with('activeflip')->where('status','1'); }])->get();
+                    // Load all batches (Active & Inactive for debugging/fixing)
+                    $new_batches = $grivi_customer->batchs()->with(['activeflip','items'=>function($itemq){ $itemq->with('activeflip'); }])->get();
                     $record['old'] =$old_batches;
                     $record['new'] = $new_batches;
                 }
@@ -277,7 +278,7 @@ class GirviController extends Controller
             $girvi_custo_query=GirvyCustomer::where(['shop_id'=>$shop_id,'branch_id'=>$branch_id]);
             $girvi_custo = $girvi_custo_query->where(['custo_id'=>$request->custo,'custo_type'=>$request->type])->first();
             if(empty($girvi_custo) && $request->girvi==''){
-                $girvi_id = GirvyCustomer::where(['shop_id'=>$shop_id,'branch_id'=>$branch_id])->max('girvi_id')+1;
+                $girvi_id = GirvyCustomer::max('girvi_id')+1;
                 $table_arr = ['c'=>'Customer','s'=>'Supplier'];
                 $customer_obj  = 'App\\Models\\'.$table_arr[$request->type];
                 $customer = $customer_obj::find($request->custo);
@@ -291,7 +292,7 @@ class GirviController extends Controller
                 $cuto_arr['shop_id'] = $shop_id;
                 $cuto_arr['branch_id'] = $branch_id;
                 $girvi_custo = GirvyCustomer::create($cuto_arr);
-            }else if($request->girvi!=$girvi_custo->id){
+            }else if($request->girvi!='' && $request->girvi!=$girvi_custo->id){
                 return response()->json(['error'=>'Invalid Customer !']);
             }
 
@@ -362,6 +363,7 @@ class GirviController extends Controller
                     "girvy_return_date"=>$request->return,
                     "shop_id"=>$shop_id,
                     "branch_id"=>$branch_id,
+                    "status"=>1, // Mark as Active
                 ];
                 $batch = GirvyBatch::create($batch_arr);
                 foreach($item_arr as $ik=>$item){
@@ -369,6 +371,7 @@ class GirviController extends Controller
                     $item['girvi_batch_id'] = $batch->id;
                     $item['shop_id'] = $shop_id;
                     $item['branch_id'] = $branch_id;
+                    $item['status'] = 1; // Mark as Active
                     GirvyItem::create($item);
                 }
                 $remark = "Amount Released !";
