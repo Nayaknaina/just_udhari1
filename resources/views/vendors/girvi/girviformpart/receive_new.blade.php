@@ -127,7 +127,7 @@
             
             <div class="btn-group shadow-sm" role="group">
                  <button type="button" class="btn btn-sm btn-outline-secondary btn-roundhalf font-sm px-2 py-0 border-right-0 font-weight-bold" data-toggle="modal" data-target="#item_category_modal" title="Add New Category" style="border-top-right-radius: 0; border-bottom-right-radius: 0; color: #555; font-size: 0.75rem;">
-                    <i class="fa fa-plus"></i> Add Cat
+                    <i class="fa fa-plus"></i> Add Category
                 </button>
                  <button type="button" class="btn btn-sm btn-primary btn-roundhalf font-sm px-3 py-0 font-weight-bold" id="btn_add_more_item" style="border-top-left-radius: 0; border-bottom-left-radius: 0; font-size: 0.75rem;">
                     <i class="fa fa-plus-circle"></i> Add Item

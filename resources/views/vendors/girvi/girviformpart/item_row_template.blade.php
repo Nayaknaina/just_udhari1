@@ -125,7 +125,7 @@
                     <div class="col-3 px-1">
                         <div class="text-center">
                             <label class="d-block text-muted font-weight-bold mb-1" style="font-size: 0.7rem;">NET</label>
-                            <input type="number" step="0.01" name="net[{{ $index }}]" id="net_{{ $index }}" class="form-control form-control-sm btn-roundhalf border shadow-sm text-center font-weight-bold text-dark" oninput="calculateItemRow({{ $index }})" placeholder="0.00" style="height: 28px; font-size: 0.8rem; padding: 0;">
+                            <input type="number" step="0.01" name="net[{{ $index }}]" id="net_{{ $index }}" class="form-control form-control-sm btn-roundhalf border shadow-sm text-center font-weight-bold text-dark" oninput="calculateItemRow({{ $index }})"  placeholder="0.00" style="height: 28px; font-size: 0.8rem; padding: 0;">
                         </div>
                     </div>
                     <div class="col-3 px-1">

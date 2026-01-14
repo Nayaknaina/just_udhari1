@@ -188,24 +188,28 @@ function getcustomer(input) {
                         if(items.length>0){
                             $.each(items,function(ii,iv){
                                 let payable = iv.issue + iv.interest;
-                                old_girvi_tr +=`<tr>
-                                                    <td>`+(ii+1)+`</td>
+                                old_girvi_tr +=`<tr class="border-bottom-0">
+                                                    <td class="font-weight-bold text-center">`+(ii+1)+`</td>
+                                                    <td><span class="badge badge-pill badge-light border text-secondary px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">GRV-`+iv.receipt+`</span></td>
+                                                    <td class="font-weight-bold text-dark">`+iv.entry_date+`</td>
                                                     <td>
-                                                        GRV-`+iv.receipt+`
+                                                        <span class="d-block font-xs text-muted text-uppercase">`+iv.interest_type+`</span>
+                                                        <span class="font-weight-bold text-dark">`+iv.interest_rate+`%</span>
                                                     </td>
-                                                    <td>
-                                                        `+iv.entry_date+`
+                                                    <td class="font-weight-bold text-dark text-right pr-4">`+iv.issue+` ₹</td>
+                                                    <td class="text-danger font-weight-bold text-right pr-4">`+iv.interest+` ₹</td>
+                                                    <td class="text-success font-weight-bold text-right pr-4" style="font-size: 0.95rem;">`+(payable)+` ₹</td>
+                                                    <td class="text-muted small">`+ov.girvy_return_date+`</td>
+                                                    <td class="text-center">
+                                                        `+((iv.status=='1') 
+                                                            ? '<span class="badge badge-warning text-white shadow-sm px-2 py-1">Recieved</span>' 
+                                                            : '<span class="badge badge-success shadow-sm px-2 py-1">Returned</span>')+`
                                                     </td>
-                                                    <td>`
-                                                        +iv.interest_type+`<hr class="m-0">`+iv.interest_rate+
-                                                    `</td>
-                                                    <td>
-                                                        `+iv.issue+`
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-light btn-circle shadow-sm text-primary" title="View Details" style="width: 30px; height: 30px; padding: 0;">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
                                                     </td>
-                                                    <td>`+iv.interest+`</td>
-                                                    <td>`+(payable)+`</td>
-                                                    <td>`+ov.girvy_return_date+`</td>
-                                                    <td>`+((iv.status=='1')?'Received':'Retrurned')+`</td>
                                                 </tr>`; 
                                                 
                                 old_girvi_principal+= iv.principal;
@@ -226,24 +230,28 @@ function getcustomer(input) {
                         if(items.length > 0){
                             $.each(items,function(ci,cv){
                                 let payable = (cv.interest * bv.girvy_period)+cv.issue;
-                               new_girvi_tr +=`<tr>
-                                                    <td>`+(ci+1)+`</td>
+                               new_girvi_tr +=`<tr class="border-bottom-0">
+                                                    <td class="font-weight-bold text-center">`+(ci+1)+`</td>
+                                                    <td><span class="badge badge-pill badge-light border text-secondary px-2 py-1 font-weight-bold" style="font-size: 0.75rem;">GRV-`+cv.receipt+`</span></td>
+                                                    <td class="font-weight-bold text-dark">`+cv.entry_date+`</td>
                                                     <td>
-                                                        GRV-`+cv.receipt+`
+                                                        <span class="d-block font-xs text-muted text-uppercase">`+cv.interest_type+`</span>
+                                                        <span class="font-weight-bold text-dark">`+cv.interest_rate+`%</span>
                                                     </td>
-                                                    <td>
-                                                        `+cv.entry_date+`
+                                                    <td class="font-weight-bold text-dark text-right pr-4">`+cv.issue+` ₹</td>
+                                                    <td class="text-danger font-weight-bold text-right pr-4">`+cv.interest+` ₹</td>
+                                                    <td class="text-success font-weight-bold text-right pr-4" style="font-size: 0.95rem;">`+(payable)+` ₹</td>
+                                                    <td class="text-muted small">`+bv.girvy_return_date+`</td>
+                                                    <td class="text-center">
+                                                        `+((cv.status=='1') 
+                                                            ? '<span class="badge badge-warning text-white shadow-sm px-2 py-1">Recieved</span>' 
+                                                            : '<span class="badge badge-success shadow-sm px-2 py-1">Returned</span>')+`
                                                     </td>
-                                                    <td>`
-                                                        +cv.interest_type+`<hr class="m-0">`+cv.interest_rate+
-                                                    `</td>
-                                                    <td>
-                                                        `+cv.issue+`
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-light btn-circle shadow-sm text-primary" title="View Details" style="width: 30px; height: 30px; padding: 0;">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
                                                     </td>
-                                                    <td>`+cv.interest+`</td>
-                                                    <td>`+(payable)+`</td>
-                                                    <td>`+bv.girvy_return_date+`</td>
-                                                    <td>`+((cv.status=='1')?'Received':'Retrurned')+`</td>
                                                 </tr>`; 
                                 new_girvi_principal += cv.principal;
                                 new_girvi_interest +=cv.interest;
@@ -586,4 +594,15 @@ function getcustomer(input) {
 
         $(this).val(val);
     });*/
+    function calculateItemRow(index) {
+    let gross = parseFloat(document.getElementById('gross_' + index).value) || 0;
+    let pure  = parseFloat(document.getElementById('pure_' + index).value) || 0;
+
+
+    document.getElementById('net_' + index).value = gross.toFixed(2);
+
+
+    let fine = (gross * pure) / 100;
+    document.getElementById('fine_' + index).value = fine.toFixed(2);
+}
 </script>

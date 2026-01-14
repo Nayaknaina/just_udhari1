@@ -1,120 +1,115 @@
 <div class="row m-0 p-1">
 
-    <!-- Customer Summary (Same as Receive UI) -->
-    <div class="col-12 p-0 mb-2">
-        <div class="customer-summary-card" id="ret_cust_summary_block" style="display: block;">
+    <!-- Customer Summary (Compact) -->
+    <div class="col-12 p-0 mb-1">
+        <div class="customer-summary-card py-2 px-3" id="ret_cust_summary_block" style="display: block; border-radius: 12px; background: #f8f9fa;">
             <div class="d-flex justify-content-between align-items-center">
-                <div>
-                     <span class="d-block font-xs text-primary font-weight-bold">CUSTOMER DETAILS</span>
-                     <h6 class="m-0 text-dark font-weight-bold fetch_custo_name">Select Customer</h6>
-                     <small class="text-muted fetch_custo_girvi_num">GRV-ID</small>
+                <div class="d-flex align-items-center">
+                     <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mr-2" style="width: 35px; height: 35px;">
+                        <i class="fa fa-user text-primary font-sm"></i>
+                     </div>
+                     <div>
+                         <h6 class="m-0 text-dark font-weight-bold fetch_custo_name" style="font-size: 0.9rem; line-height: 1.1;">Select Customer</h6>
+                         <small class="text-muted fetch_custo_girvi_num font-xs">GRV-ID</small>
+                     </div>
                 </div>
-                <div class="text-right">
-                     <span class="badge badge-pill badge-light text-primary border border-primary px-3 py-1" style="font-size: 0.8rem;">
-                        Active Items: <b id="ret_active_count">0</b>
+                <div>
+                     <span class="badge badge-pill badge-primary shadow-sm px-2 py-1 font-xs">
+                        Active: <b id="ret_active_count" class="ml-1">0</b>
                      </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Active Items List -->
-    <div class="col-12 p-0 mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-2" style="background: #fff; padding: 10px 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
-            <div class="d-flex align-items-center">
-                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-2" style="width: 32px; height: 32px;">
-                    <i class="fa fa-hand-holding-usd text-danger"></i>
-                </div>
-                <h6 class="m-0 font-weight-bold text-dark section-title">Items to Return</h6>
-            </div>
-            
-            <div class="custom-control custom-checkbox">
+    <!-- Active Items List (Compact) -->
+    <div class="col-12 p-0 mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-1 bg-white rounded-lg shadow-sm px-2 py-1">
+            <h6 class="m-0 font-weight-bold text-dark font-sm pl-1">Items to Return</h6>
+            <div class="custom-control custom-checkbox scale-90">
                 <input type="checkbox" class="custom-control-input" id="check_all_return_items">
                 <label class="custom-control-label font-weight-bold text-muted font-xs pt-1" for="check_all_return_items">SELECT ALL</label>
             </div>
         </div>
 
-        <!-- Scrollable Item List -->
-        <div class="girvi_item_scroll" id="return_items_container" style="background: #f8f9fa; border-radius: 10px; min-height: 200px;">
-            <!-- Placeholder with Demo Button -->
-            <div class="text-center py-5" id="return_placeholder">
-                <i class="fa fa-search fa-3x text-muted opacity-25 mb-3"></i>
-                <h6 class="text-muted mb-3">Search for a customer to view active items</h6>
-                <button type="button" class="btn btn-sm btn-outline-primary btn-roundhalf" onclick="loadReturnDemoData()">
-                    <i class="fa fa-flask"></i> Load Demo Data
+        <!-- Scrollable Item List (Compact Ht) -->
+        <div class="girvi_item_scroll" id="return_items_container" style="background: #fff; border-radius: 10px; min-height: 120px; max-height: 30vh; overflow-y: auto; border: 1px solid #f0f0f0;">
+            <!-- Placeholder (Very Compact) -->
+            <div class="text-center py-4" id="return_placeholder">
+                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                    <i class="fa fa-search fa-lg text-secondary"></i>
+                </div>
+                <h6 class="text-muted font-xs mb-2">Search Customer to View Items</h6>
+                <button type="button" class="btn btn-xs btn-outline-primary btn-roundhalf px-3" onclick="loadReturnDemoData()">
+                    Load Demo
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Totals & Actions -->
+    <!-- Totals & Actions (Compact) -->
     <div class="col-12 p-0">
         <div class="card border-0 shadow-sm" style="border-radius: 15px; background: #fff;">
-            <div class="card-body p-3">
+            <div class="card-body p-2">
                 
-                <!-- Calculation Row -->
-                <div class="row text-center mb-3">
-                    <div class="col-4 border-right">
-                        <small class="text-muted d-block font-xs font-weight-bold">PRINCIPAL</small>
-                        <h6 class="mb-0 font-weight-bold text-dark" id="ret_total_principal">₹ 0</h6>
+                <!-- Calculation Row (Compact) -->
+                <div class="row text-center mb-2 mx-0 bg-light rounded py-2 border">
+                    <div class="col-4 border-right px-1">
+                        <small class="text-muted d-block font-xs font-weight-bold text-uppercase">Principal</small>
+                        <h6 class="mb-0 font-weight-bold text-dark font-sm" id="ret_total_principal">0</h6>
                     </div>
-                    <div class="col-4 border-right">
-                        <small class="text-muted d-block font-xs font-weight-bold">INTEREST</small>
-                        <h6 class="mb-0 font-weight-bold text-danger" id="ret_total_interest">₹ 0</h6>
+                    <div class="col-4 border-right px-1">
+                        <small class="text-muted d-block font-xs font-weight-bold text-uppercase">Interest</small>
+                        <h6 class="mb-0 font-weight-bold text-danger font-sm" id="ret_total_interest">0</h6>
                     </div>
-                    <div class="col-4">
-                        <small class="text-muted d-block font-xs font-weight-bold">PAYABLE</small>
-                        <h5 class="mb-0 font-weight-bold text-success" id="ret_total_payable">₹ 0</h5>
+                    <div class="col-4 px-1">
+                        <small class="text-muted d-block font-xs font-weight-bold text-uppercase">Payable</small>
+                        <h6 class="mb-0 font-weight-bold text-success font-sm" id="ret_total_payable">0</h6>
                     </div>
                 </div>
 
-                <hr class="my-2 opacity-50">
+                <hr class="my-1 opacity-50">
 
-                <!-- Payment & Action Row (Detailed) -->
+                <!-- Payment & Action Row -->
                 <div class="row align-items-center">
                     <div class="col-12 mb-2">
-                       <label class="font-xs text-muted mb-2 ml-1 font-weight-bold d-block">PAY MODE</label>
-                       
-                       <!-- Custom Payment Toggle -->
+                       <!-- Compact Toggle -->
                        <style>
                             .payment-toggle-container {
                                 display: flex;
                                 background: #f1f3f5;
-                                padding: 4px;
+                                padding: 2px;
                                 border-radius: 50px;
-                                position: relative;
                             }
                             .payment-option {
                                 flex: 1;
                                 text-align: center;
-                                padding: 8px 5px;
-                                font-size: 0.85rem;
+                                padding: 5px 2px;
+                                font-size: 0.8rem;
                                 font-weight: bold;
                                 color: #888;
                                 cursor: pointer;
                                 border-radius: 50px;
-                                transition: all 0.3s;
-                            }
-                            .payment-option:hover {
-                                color: #555;
+                                transition: all 0.2s;
                             }
                             .payment-option.active {
                                 background: #fff;
-                                color: #ff6e26 !important; /* Theme color */
-                                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                color: #ff6e26 !important;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                             }
+                            .scale-90 { transform: scale(0.9); transform-origin: right center; }
                        </style>
                        
-                       <div class="payment-toggle-container mb-3">
+                       <div class="payment-toggle-container mb-0">
                             <input type="hidden" name="return_medium" id="ret_pay_medium" value="cash">
                             <div class="payment-option active" onclick="setReturnPaymentMode('cash', this)">
-                                <i class="fa fa-money-bill-wave"></i> Cash
+                                <i class="fa fa-money-bill-wave mr-1"></i> Cash
                             </div>
                             <div class="payment-option" onclick="setReturnPaymentMode('on', this)">
-                                <i class="fa fa-university"></i> Online
+                                <i class="fa fa-university mr-1"></i> Online
                             </div>
                             <div class="payment-option" onclick="setReturnPaymentMode('mix', this)">
-                                <i class="fa fa-exchange-alt"></i> Mix
+                                <i class="fa fa-exchange-alt mr-1"></i> Mix
                             </div>
                         </div>
                     </div>
@@ -128,18 +123,18 @@
                                     <label class="font-xs text-muted font-weight-bold mb-1">CASH</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-0 text-success"><i class="fa fa-money-bill-wave"></i></span>
+                                            <span class="input-group-text bg-light border-0 text-success pl-2 pr-1"><i class="fa fa-money-bill-wave"></i></span>
                                         </div>
-                                        <input type="number" class="form-control btn-roundhalf bg-light border-0 font-weight-bold text-dark" id="ret_split_cash" placeholder="0" oninput="calculateReturnSplit('cash')" style="height: 35px;">
+                                        <input type="number" class="form-control btn-roundhalf bg-light border-0 font-weight-bold text-dark font-xs" id="ret_split_cash" placeholder="Cash" oninput="calculateReturnSplit('cash')" style="height: 30px;">
                                     </div>
                                 </div>
                                 <div class="col-6 pl-2">
                                     <label class="font-xs text-muted font-weight-bold mb-1">ONLINE</label>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-0 text-info"><i class="fa fa-university"></i></span>
+                                            <span class="input-group-text bg-light border-0 text-info pl-2 pr-1"><i class="fa fa-university"></i></span>
                                         </div>
-                                        <input type="number" class="form-control btn-roundhalf bg-light border-0 font-weight-bold text-dark" id="ret_split_online" placeholder="0" oninput="calculateReturnSplit('online')" style="height: 35px;">
+                                        <input type="number" class="form-control btn-roundhalf bg-light border-0 font-weight-bold text-dark font-xs" id="ret_split_online" placeholder="Online" oninput="calculateReturnSplit('online')" style="height: 30px;">
                                     </div>
                                 </div>
                             </div>
@@ -147,8 +142,8 @@
                     </div>
 
                     <div class="col-12 text-center">
-                        <button type="button" class="btn btn-gradient-success btn-block btn-roundhalf font-weight-bold py-3 shadow-sm" id="btn_process_return" style="font-size: 1rem;">
-                            <i class="fa fa-check mr-1"></i> Confirm & Release
+                        <button type="button" class="btn btn-gradient-success btn-block btn-roundhalf font-weight-bold py-2 shadow-sm" id="btn_process_return" style="font-size: 0.95rem;">
+                            <i class="fa fa-check-circle mr-1"></i> Confirm & Release
                         </button>
                     </div>
                 </div>

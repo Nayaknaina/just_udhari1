@@ -118,23 +118,96 @@
                                             <div class="card mb-2" id="new_girvy">
                                                 <div class="card-header p-1">
                                                     
-                                                    <ul id="tab_buttons" class="d-flex px-0 text-center">
-                                                        <li class="p-0">
-                                                            <label for="recieved-tab" class="btn tab-btn active w-100 m-0" data-target="#recieved-tab" id="recieved-tab">
-                                                                <input type="radio"  name="operation" value="receive" checked style="display:none;"> Girvi Received
-                                                            </label>
-                                                        </li>
-                                                        {{-- <li class="p-0">
-                                                            <label for="interest-tab" class="btn tab-btn w-100 m-0" data-target="#interest-tab" id="interest-tab">
-                                                                <input type="radio"   name="operation" value="interest" style="display:none;"> Pay Interest
-                                                            </label>
-                                                        </li> --}}
-                                                        <li class="p-0">
-                                                            <label for="return-tab" class="btn tab-btn w-100 m-0" data-target="#return-tab" id="return-tab" >
-                                                                <input type="radio" name="operation" value="return"  style="display:none;"> Girvi Return
-                                                            </label>
-                                                        </li>
-                                                    </ul>
+                                                    <div class="segmented-control p-1 p-md-2 bg-white d-flex mb-3 shadow-sm" id="tab_buttons" style="border-radius: 25px;">
+                                                        <style>
+                                                            .segmented-control {
+                                                                background: #ffffff;
+                                                                border: 1px solid rgba(0,0,0,0.04);
+                                                                position: relative;
+                                                                z-index: 10;
+                                                            }
+                                                            .tab-btn {
+                                                                flex: 1;
+                                                                text-align: center;
+                                                                padding: 12px 10px;
+                                                                border-radius: 20px !important;
+                                                                color: #8898aa;
+                                                                cursor: pointer;
+                                                                transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                                                                border: none !important;
+                                                                font-weight: 700;
+                                                                margin: 0 4px !important; 
+                                                                background: transparent;
+                                                                display: flex !important;
+                                                                align-items: center;
+                                                                justify-content: center;
+                                                                gap: 10px;
+                                                                font-size: 0.9rem;
+                                                                letter-spacing: 0.5px;
+                                                                text-transform: uppercase;
+                                                                position: relative;
+                                                                overflow: hidden;
+                                                            }
+                                                            /* Mobile Optimization */
+                                                            @media (max-width: 576px) {
+                                                                .tab-btn {
+                                                                    padding: 10px 5px;
+                                                                    font-size: 0.75rem; /* Smaller font on phone */
+                                                                    gap: 5px;
+                                                                    border-radius: 15px !important;
+                                                                }
+                                                                .tab-btn i {
+                                                                    font-size: 1rem !important;
+                                                                }
+                                                            }
+                                                            
+                                                            .tab-btn:hover:not(.active) {
+                                                                background: #f8f9fe !important;
+                                                                color: #ff6e26;
+                                                            }
+                                                            .tab-btn.active {
+                                                                background: linear-gradient(135deg, #ff6e26 0%, #ff8c00 100%) !important;
+                                                                color: #fff !important;
+                                                                box-shadow: 0 6px 15px rgba(255, 110, 38, 0.4);
+                                                                transform: translateY(-1px);
+                                                            }
+                                                            /* Shine Effect */
+                                                            .tab-btn.active::after {
+                                                                content: '';
+                                                                position: absolute;
+                                                                top: 0;
+                                                                left: -100%;
+                                                                width: 50%;
+                                                                height: 100%;
+                                                                background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+                                                                transform: skewX(-25deg);
+                                                                animation: shine 3s infinite;
+                                                            }
+                                                            @keyframes shine {
+                                                                0% { left: -100%; }
+                                                                20% { left: 200%; }
+                                                                100% { left: 200%; }
+                                                            }
+                                                            
+                                                            .tab-btn i {
+                                                                font-size: 1.2rem;
+                                                                transition: transform 0.3s;
+                                                            }
+                                                            .tab-btn.active i {
+                                                                transform: scale(1.1);
+                                                            }
+                                                        </style>
+                                                        
+                                                        <label for="recieved-tab" class="btn tab-btn active" data-target="#recieved-tab" id="recieved-tab">
+                                                            <input type="radio" name="operation" value="receive" checked style="display:none;"> 
+                                                            <i class="fa fa-arrow-circle-down"></i> Received
+                                                        </label>
+                                                        
+                                                        <label for="return-tab" class="btn tab-btn" data-target="#return-tab" id="return-tab">
+                                                            <input type="radio" name="operation" value="return" style="display:none;">
+                                                            <i class="fa fa-arrow-circle-up"></i> Return / Settlement
+                                                        </label>
+                                                    </div>
                                                     <div class="search-pill-container shadow-sm mb-2">
                                                         <style>
                                                             .search-pill-container {
